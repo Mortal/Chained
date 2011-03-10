@@ -288,17 +288,14 @@ int Field::notStillCount() {
 
 void Field::raisestack() {
     byte raisenow = 0;
-    byte stackrising;
-    
-    // Check field to see if we can raise the stack
-    if (stackrising = 1)
-    if (stackrising &= (swapStack->swapCount() == 0))
-    if (stackrising &= (notStillCount() == 0))
-    {}
+	// whether we may raise the stack
+	byte stackrising = (swapStack->swapCount() == 0) && (notStillCount() == 0);
     
     // Check if we're actually gonna raise the stack
     if (stackrising) {
-        raisenow |= (this->speedrising ? 1 : 0);
+		if (this->speedrising) {
+			raisenow = 1;
+		}
         if DEBUGIT_FIELDRAISESTACK logfile << "Field::raisest. Speedrising = " << (this->speedrising ? 1 : 0) << std::endl;
     }
     
@@ -1205,57 +1202,36 @@ int WINAPI WinMain (HINSTANCE hInstance,
     
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-                     //012345678901234
+
+	                 //012345678901234
     char filename[] = "block - -  .raw";
     for (int i = 1; i <= 9; ++i) {
         if (i == 8) continue;
+        if (i < 10)
+            filename[5] = (char) (i+'0');
+        else
+            filename[5] = (char) ((i-10)+'A');
         for (int j = 1; j <= 3; ++j) {
-            int frameid = 0;
-            for (int k = 0; k < BLOCK_MAXFRAMES; ++k) {
-                if (k) frameid++;
-                if (i < 10)
-                    filename[5] = (char) (i+'0');
-                else
-                    filename[5] = (char) ((i-10)+'A');
-                switch (j) {
-                    case 1:
-                        filename[7] = '0';
-                    break;
-                    case 2:
-                        filename[7] = 'a';
-                    break;
-                    case 3:
-                        filename[7] = 'b';
-                    break;
-                    default:
-                        logfile << __LINE__ << " fffffff";
-                    break;
-                }
-                filename[9] = '0' + k / 10;
-                filename[10] = '0' + k % 10;
-                int imgidx = (j == 1 ? IMGMEM_OFFSET0 : (j == 2 ? IMGMEM_OFFSETA : IMGMEM_OFFSETB)) + IMGMEM__FRAMES * i + k;
+            switch (j) {
+                case 1:
+                    filename[7] = '0';
+                break;
+                case 2:
+                    filename[7] = 'a';
+                break;
+                case 3:
+                    filename[7] = 'b';
+                break;
+                default:
+                    logfile << __LINE__ << " fffffff";
+                break;
+            }
+            for (int frameid = 0; frameid < BLOCK_MAXFRAMES; ++frameid) {
+                filename[9] = '0' + frameid / 10;
+                filename[10] = '0' + frameid % 10;
+                int imgidx = (j == 1 ? IMGMEM_OFFSET0 : (j == 2 ? IMGMEM_OFFSETA : IMGMEM_OFFSETB)) + IMGMEM__FRAMES * i + frameid;
                 logfile << filename << "->" << imgidx << std::endl;
                 if (!fileExists(filename)) break;
-                
-                /*ilBindImage(42);
-                if (!ilLoadImage(filename)) break;
-                
-                iluImageParameter(ILU_FILTER, ILU_SCALE_TRIANGLE);
-                iluScale(BLOCK_SRCWIDTH, BLOCK_SRCHEIGHT, 1);
-                
-                int size = BLOCK_SRCWIDTH*BLOCK_SRCHEIGHT*3;
-                byte* image = (byte*) ilGetData();
-                
-                glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                
-                glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-                
-                glTexImage2D (GL_TEXTURE_2D, 0, GL_RGB, BLOCK_SRCWIDTH, BLOCK_SRCHEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, image);*/
                 
                 int size = BLOCK_SRCWIDTH*BLOCK_SRCHEIGHT*3;
                 char *image = new char[size];
