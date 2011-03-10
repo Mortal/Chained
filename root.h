@@ -1,4 +1,5 @@
 #include "constants.h"
+#include <fstream>
 
 class Root {
     public:
@@ -18,29 +19,12 @@ class Root {
         static unsigned int keysheld[256];
         static int **imgframes;
         static int imgframes_count;
+		static void init();
+		static void EnableOpenGL();
+		static void DisableOpenGL();
+		static std::ofstream logfile;
     private:
         static byte rand_is_ready;
         static void Key(int key, byte repeat);
         static void initrand();
 };
-int Root::state = STATE_TITLE;
-int Root::substate = 0;
-byte Root::paused = 0;
-byte Root::goframe = 1;
-int Root::CLOCKS_PER_FRAME = 0;
-Game *Root::game[8] = {0,0,0,0,0,0,0,0};
-int Root::numply = 0;
-int Root::newnumply = 1;
-byte Root::rand_is_ready = 0;
-unsigned int Root::keysheld[256] = {
-    0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0,
-    0,0,0,0,0,0,0,0
-};
-int **Root::imgframes = 0;
-int Root::imgframes_count = 0;

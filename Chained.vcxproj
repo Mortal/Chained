@@ -71,20 +71,19 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="garbage.h" />
     <ClInclude Include="img.questionmark.h" />
-    <ClInclude Include="os.h" />
     <ClInclude Include="popper.h" />
     <ClInclude Include="root.h" />
     <ClInclude Include="scoringsystem.h" />
     <ClInclude Include="swap.h" />
     <ClInclude Include="tga.h" />
     <ClInclude Include="vkeys.h" />
+    <ClInclude Include="winmain.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="fileexists.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="rootutils.cpp" />
     <ClCompile Include="scoringsystem.cpp" />
     <ClCompile Include="tga.c" />
+    <ClCompile Include="winmain.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
