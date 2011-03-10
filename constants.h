@@ -3,20 +3,22 @@
 #define VERSION "0.0.8"
 #define VERSIONMATH (8)
 // aaaiiirrr (major minor revision)
-#define SCREEN_WIDTH (800)
-#define SCREEN_HEIGHT (500)
-#define BLOCK_WIDTH (32)
-#define BLOCK_HEIGHT (32)
+#define FIELD_WIDTH (6)
+#define FIELD_HEIGHT (12)
+#define FIELD_COLORS (5)
 #define BLOCK_SRCWIDTH (16)
 #define BLOCK_SRCHEIGHT (16)
+#define BLOCK_SCALE (2)
+#define BLOCK_WIDTH (BLOCK_SCALE*BLOCK_SRCWIDTH)
+#define BLOCK_HEIGHT (BLOCK_SCALE*BLOCK_SRCHEIGHT)
 #define BLOCK_MAXFRAMES (100)
 #define CURSOR_MARGIN (2)
 #define CURSOR_PADDING (1)
+#define SCREEN_WIDTH (FIELD_WIDTH*BLOCK_WIDTH)
+#define SCREEN_HEIGHT (FIELD_HEIGHT*BLOCK_HEIGHT)
 
 /* The number of frames to hold a key before it repeats */
 #define KEYTOHOLD (15)
-
-//#define CLOCKS_PER_FRAME (CLOCKS_PER_SEC / 60)
 
 // Debugging
 

@@ -236,7 +236,7 @@ int Root::tick() {
                 game[i]->id = i;
                 game[i]->character = i;
                 game[i]->points = 0;
-                game[i]->field.newfield(6,12,5,0);
+                game[i]->field.newfield(FIELD_WIDTH,FIELD_HEIGHT,FIELD_COLORS,0);
                 game[i]->field.canraisestack = 1;
                 game[i]->field.newline();
                 game[i]->field.parentgame = game[i];
