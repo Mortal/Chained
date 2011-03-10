@@ -7,7 +7,7 @@ class Popper {
         Popper(int count, class Field *parentfield_);
         void clean();
         
-    protected:
+    private:
         class Field *parentfield;
         class Block *stack[MAXPOPPERS];
         int stackx[MAXPOPPERS];

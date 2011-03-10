@@ -38,7 +38,7 @@ class Field {
         int stoptime;
         int stackoffset;
         int stacktick;
-    protected:
+    private:
         int allocnextrow();
         class Block ** blocks;
         class Block ** nextrow;

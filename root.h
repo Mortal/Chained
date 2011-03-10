@@ -18,7 +18,7 @@ class Root {
         static unsigned int keysheld[256];
         static int **imgframes;
         static int imgframes_count;
-    protected:
+    private:
         static byte rand_is_ready;
         static void Key(int key, byte repeat);
         static void initrand();

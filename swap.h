@@ -8,7 +8,7 @@ class Swap {
         int fromx,fromy,tox,toy;
         Swap(Block *block_, int fromx_, int fromy_, int tox_, int toy_, byte switchblock_, class Field *parentfield);
         int draw(float offx, float offy);
-    protected:
+    private:
         int frame;
 };
 
@@ -19,7 +19,7 @@ class SwapStack {
         SwapStack() {this->stacklen = 0;}
         int swapCount();
         
-    protected:
+    private:
         class Swap *stack[MAXSWAPS];
         int stacklen;
 };
