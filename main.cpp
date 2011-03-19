@@ -42,6 +42,7 @@ unsigned int Root::keysheld[256] = {
 };
 int **Root::imgframes = 0;
 int Root::imgframes_count = 0;
+std::ofstream Root::logfile("log");
 
 void Root::KeyDown(int key) {
 	keysheld[key] = 1;
