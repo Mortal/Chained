@@ -22,38 +22,38 @@
 
 // Debugging
 
-    // Misc
-    #define DEBUGIT_KEYS (0)
-    #define DEBUGIT_KEYS_ALL (0)
-    #define DEBUGIT_KEYS_UNCAUGHT (0)
-    #define DEBUGIT_NEWFIELD (0)
-    #define DEBUGIT_NEWLINE (0)
-    #define DEBUGIT_FIELDRAISESTACK (0)
-    
-    // Swapping
-    #define DEBUGIT_FIELDSWAP (0)
-    #define DEBUGIT_FIELDSWAPABLE (0)
-    #define DEBUGIT_SWAPSTACKSWAP (0)
-    #define DEBUGIT_SWAPSTACKSWAP_MEMORY (0)
-    #define DEBUGIT_FIELDRAWSWAP (0)
-    #define DEBUGIT_SWAPSTACKSWAPCOUNT (0)
-    
-    #define DEBUGIT_SWAPCONSTRUCT (0)
-    
-    #define DEBUGIT_FIELDCHECKBLOCKS (0)
-    #define DEBUGIT_FIELDFALLBLOCKS (0)
-    #define DEBUGIT_FIELDPOPPERCOUNT (0)
-    
-    #define DEBUGIT_POPPERADD (0)
-    
-    // Drawing
-    #define DEBUGIT_ROOTDRAW (0)
-    #define DEBUGIT_GAMEDRAW (0)
-    #define DEBUGIT_FIELDDRAW (0)
-    #define DEBUGIT_BLOCKDRAW (0)
-    #define DEBUGIT_SWAPDRAW (0)
-    #define DEBUGIT_POPPERDRAW (0)
-    #define DEBUGIT_DRAWBACKGROUND (0)
+	// Misc
+	#define DEBUGIT_KEYS (0)
+	#define DEBUGIT_KEYS_ALL (0)
+	#define DEBUGIT_KEYS_UNCAUGHT (0)
+	#define DEBUGIT_NEWFIELD (0)
+	#define DEBUGIT_NEWLINE (0)
+	#define DEBUGIT_FIELDRAISESTACK (0)
+	
+	// Swapping
+	#define DEBUGIT_FIELDSWAP (0)
+	#define DEBUGIT_FIELDSWAPABLE (0)
+	#define DEBUGIT_SWAPSTACKSWAP (0)
+	#define DEBUGIT_SWAPSTACKSWAP_MEMORY (0)
+	#define DEBUGIT_FIELDRAWSWAP (0)
+	#define DEBUGIT_SWAPSTACKSWAPCOUNT (0)
+	
+	#define DEBUGIT_SWAPCONSTRUCT (0)
+	
+	#define DEBUGIT_FIELDCHECKBLOCKS (0)
+	#define DEBUGIT_FIELDFALLBLOCKS (0)
+	#define DEBUGIT_FIELDPOPPERCOUNT (0)
+	
+	#define DEBUGIT_POPPERADD (0)
+	
+	// Drawing
+	#define DEBUGIT_ROOTDRAW (0)
+	#define DEBUGIT_GAMEDRAW (0)
+	#define DEBUGIT_FIELDDRAW (0)
+	#define DEBUGIT_BLOCKDRAW (0)
+	#define DEBUGIT_SWAPDRAW (0)
+	#define DEBUGIT_POPPERDRAW (0)
+	#define DEBUGIT_DRAWBACKGROUND (0)
 
 // Timings (in frames)
 #define TIME_SWITCH (5)
