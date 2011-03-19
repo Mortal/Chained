@@ -23,6 +23,7 @@ class Root {
 		static void EnableOpenGL();
 		static void DisableOpenGL();
 		static std::ofstream logfile;
+		static void loadtexs();
 	private:
 		static byte rand_is_ready;
 		static void Key(int key, byte repeat);
