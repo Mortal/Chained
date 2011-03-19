@@ -1,4 +1,4 @@
-#include <gl/gl.h>
+#include <GL/gl.h>
 
 class Game {
     public:

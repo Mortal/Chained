@@ -1,7 +1,7 @@
 #include "winmain.h"
 #include "root.h"
 #include <time.h>
-#include <gl/gl.h>
+#include <GL/gl.h>
 
 static HWND hWnd;
 static HDC hDC;

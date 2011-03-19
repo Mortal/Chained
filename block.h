@@ -1,4 +1,4 @@
-#include <gl/gl.h>
+#include <GL/gl.h>
 #include "constants.h"
 
 class Block {

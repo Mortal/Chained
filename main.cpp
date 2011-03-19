@@ -1,7 +1,7 @@
 // Mortal's Tetris Attack clone, begun May 5th 2007.
 
 #include "winmain.h"
-#include <gl/gl.h>
+#include <GL/gl.h>
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
