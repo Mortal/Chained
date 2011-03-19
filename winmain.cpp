@@ -3,6 +3,17 @@
 #include <time.h>
 #include <GL/gl.h>
 
+#include <windows.h>
+
+int WINAPI WinMain (HINSTANCE hInstance,
+                    HINSTANCE hPrevInstance,
+                    LPSTR lpCmdLine,
+                    int iCmdShow);
+
+LRESULT CALLBACK WndProc (HWND hWnd, UINT message,
+                          WPARAM wParam, LPARAM lParam);
+
+
 static HWND hWnd;
 static HDC hDC;
 static HGLRC hRC;
