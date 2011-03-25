@@ -21,26 +21,6 @@ GLXContext              glc;
 XWindowAttributes       gwa;
 XEvent                  xev;
 
-void DrawAQuad() {
-	glClearColor(1.0, 1.0, 1.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(-1., 1., -1., 1., 1., 20.);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0., 0., 10., 0., 0., 0., 0., 1., 0.);
-
-	glBegin(GL_QUADS);
-	glColor3f(1., 0., 0.); glVertex3f(-.75, -.75, 0.);
-	glColor3f(0., 1., 0.); glVertex3f( .75, -.75, 0.);
-	glColor3f(0., 0., 1.); glVertex3f( .75,  .75, 0.);
-	glColor3f(1., 1., 0.); glVertex3f(-.75,  .75, 0.);
-	glEnd();
-} 
-
 int main(int argc, char *argv[]) {
 	Root::init();
 	Root::EnableOpenGL();
@@ -66,6 +46,8 @@ int main(int argc, char *argv[]) {
 				printf("Key up: %d -> %d -> %d\n", key->keycode, sym, vk);
 				Root::KeyUp(vk);
 			}
+		} else if (XCheckTypedEvent(dpy, ClientMessage, &xev)) {
+			break;
 		} else {
 			/* OpenGL code goes here */
 			struct timeval start;
@@ -92,6 +74,8 @@ int main(int argc, char *argv[]) {
 			if (tosleep > 0) usleep(tosleep);
 		}
 	}
+	printf("Bye bye\n");
+	Root::DisableOpenGL();
 }
 
 void Root::EnableOpenGL() {
@@ -118,18 +102,21 @@ void Root::EnableOpenGL() {
 	cmap = XCreateColormap(dpy, root, vi->visual, AllocNone);
 
 	swa.colormap = cmap;
-	swa.event_mask = ExposureMask | KeyPressMask;
+	swa.event_mask = KeyPressMask | KeyReleaseMask;
 
-	win = XCreateWindow(dpy, root, 0, 0, 600, 600, 0, vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
+	win = XCreateWindow(dpy, root, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, vi->depth, InputOutput, vi->visual, CWColormap | CWEventMask, &swa);
 
 	XMapWindow(dpy, win);
-	XStoreName(dpy, win, "VERY SIMPLE APPLICATION");
+	XStoreName(dpy, win, WINNAME);
 
-	glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
+	Atom wmDelete=XInternAtom(dpy, "WM_DELETE_WINDOW", True);
+	XSetWMProtocols(dpy, win, &wmDelete, 1);
+
+	glc = glXCreateContext(dpy, vi, NULL, GL_FALSE);
 	glXMakeCurrent(dpy, win, glc);
 
 	glEnable(GL_TEXTURE_2D);
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+	//glBlendFunc(GL_SRC_ALPHA,GL_ONE);
 }
 
 void Root::DisableOpenGL() {

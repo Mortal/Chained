@@ -30,7 +30,8 @@ Game *Root::game[8] = {0,0,0,0,0,0,0,0};
 int Root::numply = 0;
 int Root::newnumply = 1;
 byte Root::rand_is_ready = 0;
-unsigned int Root::keysheld[256] = {
+#define KEYCOUNT (256)
+unsigned int Root::keysheld[KEYCOUNT] = {
 	0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,
@@ -45,11 +46,13 @@ int Root::imgframes_count = 0;
 std::ofstream Root::logfile("log");
 
 void Root::KeyDown(int key) {
+	if (key >= KEYCOUNT) return;
 	keysheld[key] = 1;
 	Key(key, KEYTYPE_DOWN);
 }
 
 void Root::KeyUp(int key) {
+	if (key >= KEYCOUNT) return;
 	keysheld[key] = 0;
 	Key(key, KEYTYPE_UP);
 }
