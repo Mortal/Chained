@@ -10,6 +10,8 @@
 #include <GL/glu.h>
 #include <sys/time.h>
 
+#define FRAMEDURATION (1000000/60)
+
 Display                 *dpy;
 Window                  root;
 GLint                   att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
@@ -70,7 +72,7 @@ int main(int argc, char *argv[]) {
 			gettimeofday(&end, NULL);
 
 			int elapsed = (end.tv_sec-start.tv_sec)*1000000 + end.tv_usec - start.tv_usec;
-			int tosleep = 20000-elapsed;
+			int tosleep = FRAMEDURATION-elapsed;
 			if (tosleep > 0) usleep(tosleep);
 		}
 	}
