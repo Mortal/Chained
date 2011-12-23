@@ -6,7 +6,16 @@ class SwapStack {
 		void draw(float offx, float offy);
 		void swap(Block *block, int fromx, int fromy, int tox, int toy, byte switchblock, class Field *parent);
 		SwapStack() {this->stacklen = 0;}
-		int swapCount();
+		inline int swapCount() {
+			int count = 0;
+			for (int i = 0; i < stacklen; i++) {
+				if (stack[i]) {
+					if DEBUGIT_SWAPSTACKSWAPCOUNT logfile << "SwSt::swCount   stack[" << i << "] is in use: " << stack[i] << std::endl;
+					count++;
+				}
+			}
+			return count;
+		}
 		
 	private:
 		class Swap *stack[MAXSWAPS];

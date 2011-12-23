@@ -251,17 +251,6 @@ int tick() {
 	return 0;
 }
 
-int SwapStack::swapCount() {
-	int count = 0;
-	for (int i = 0; i < stacklen; i++) {
-		if (stack[i]) {
-			if DEBUGIT_SWAPSTACKSWAPCOUNT logfile << "SwSt::swCount   stack[" << i << "] is in use: " << stack[i] << std::endl;
-			count++;
-		}
-	}
-	return count;
-}
-
 int Field::notStillCount() {
 	int count = 0;
 	int n = getwidth();
