@@ -293,69 +293,6 @@ void draw() {
 	}
 }
 
-void Field::newfield(int width, int height, int colors, int hasvs) {
-	this->width = width;
-	this->height = height;
-	this->colors = colors;
-	this->hasvs = hasvs;
-	int count = width * height;
-	this->blocks = new Block*[width*height];
-	for (int i = 0; i < count; i++) this->blocks[i] = 0;
-	int startrows;
-	if (height > 8) startrows = height - 4;
-	else startrows = height/2;
-	Block *curblock, *blockbeneath, *blockleft;
-	for (int j = 0; j < startrows; j++) {
-		for (int i = 0; i < width; i++) {
-			int newidx = (width*(height-j-1))+i;
-			if (this->blocks[newidx]) {
-				logfile << "Field::newfield Hmm! Field->blocks[" << newidx << "] already set!" << std::endl;
-				delete this->blocks[newidx];
-				this->blocks[newidx] = 0;
-			}
-			curblock = this->blocks[newidx] = new Block;
-			if (i == 0) blockleft = 0;
-			else blockleft = this->blocks[newidx-1];
-			if (j == 0) blockbeneath = 0;
-			else {
-				blockbeneath = this->blocks[newidx+width];
-			}
-			int color = rnd(1, colors-(blockleft?1:0)-(blockbeneath?1:0));
-			if DEBUGIT_NEWFIELD {
-				logfile << "Field::newfield " << i << "," << j << " " << color << " ";
-				if (blockbeneath || blockleft) {
-					logfile << "(";
-					if (blockleft) {
-						logfile << "left " << blockleft->face;
-						if (blockbeneath) logfile << ", ";
-					}
-					if (blockbeneath) logfile << "under " << blockbeneath->face;
-					logfile << ") ";
-				}
-			}
-			if (blockleft && blockbeneath) {
-				if	  (color >= blockleft->face && color >= blockbeneath->face) color += 2;
-				else if (color >= blockleft->face) {
-					color += 1;
-					if (color >= blockbeneath->face) color += 1;
-				} else if (color >= blockbeneath->face) {
-					color += 1;
-					if (color >= blockleft->face) color += 1;
-				}
-			} else if 
-					((blockleft && (color >= blockleft->face)) ||
-					(blockbeneath && (color >= blockbeneath->face))) {
-				color += 1;
-			}
-			if DEBUGIT_NEWFIELD logfile << "Field::newfield " << color << std::endl;
-			curblock->face = color;
-			curblock->state = BLOCKSTATE_STILL;
-			curblock->ischain = 0;
-		}
-	}
-	newline();
-}
-
 Field::Field() {
 	this->usedpoppers = 0;
 	this->nextrowfilled = 0;
