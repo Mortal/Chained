@@ -293,14 +293,6 @@ void draw() {
 	}
 }
 
-int Field::allocnextrow() {
-	if (this->nextrow) return 0;
-	int w = this->getwidth();
-	if (!w) return 0;
-	this->nextrow = new Block*[this->getwidth()];
-	return 1;
-}
-
 void Field::newline() {
 	if (!canraisestack) return;
 	int w = getwidth();

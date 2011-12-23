@@ -247,7 +247,13 @@ class Field {
 		int stackoffset;
 		int stacktick;
 	private:
-		int allocnextrow();
+		int allocnextrow() {
+			if (this->nextrow) return 0;
+			int w = this->getwidth();
+			if (!w) return 0;
+			this->nextrow = new Block*[this->getwidth()];
+			return 1;
+		}
 		class Block ** blocks;
 		class Block ** nextrow;
 		byte nextrowfilled;
