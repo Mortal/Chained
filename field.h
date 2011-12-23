@@ -121,6 +121,37 @@ class Field {
 				}
 			}   
 		}
+		void DOYOURTHING(int blocksDIR, int COORD, int DIR, int max, bool horizontal, const char * DEBUGMSG, int & ischain, int & totalmatches, int w, int h, Block * cur, int x, int y) {
+			if (blocksDIR > 1) {
+				int matches = 0;
+				for (int i = (COORD) + (DIR); i >= 0 && i < max; i += (DIR)) {
+					const int IDX = horizontal ? y * w + i : i * w + x;
+					if (
+						(!this->blocks[IDX]) ||
+						(!(this->blocks[IDX]->state == BLOCKSTATE_STILL)) ||
+						(!(this->blocks[IDX]->face == cur->face))
+					   ) break;
+					if (IDX+w<w*h) {
+						if (
+							(!this->blocks[IDX+w])
+						   ) break;
+					}
+					if (this->blocks[IDX]->state != BLOCKSTATE_STILL) logfile << "aah jerv" << std::endl;
+					ischain |= this->blocks[IDX]->ischain;
+					matches++;
+				}
+				if (matches > 1) {
+					if (DEBUGIT_FIELDCHECKBLOCKS) logfile << "Field::chkblo.  " << x << "," << y << " Matching " << DEBUGMSG << "!" << std::endl;
+					for (int i = COORD; i >= COORD + ((DIR) * matches); i += (DIR)) {
+						const int IDX = horizontal ? y * w + i : i * w + x;
+						if (!this->blocks[IDX]->matchframe) {
+							this->blocks[IDX]->matchframe = 1;
+							totalmatches++;
+						}
+					}
+				}
+			}
+		}
 		void checkblocks() {
 			int w = this->getwidth();
 			int h = this->getheight();
@@ -138,38 +169,10 @@ class Field {
 						int blocksabove = h-y-1;
 						//if DEBUGIT_FIELDCHECKBLOCKS logfile << "Field::chkblo.  " << x << "," << y << " Blocks left,right,above,below = " << blocksleft << "," << blocksright << "," << blocksabove << "," << blocksbelow << std::endl;
 
-#define DOYOURTHING(blocksDIR, COORD, DIR, INCR, IDX, DEBUGMSG) \
-						if (blocksDIR > 1) {\
-							int matches = 0;\
-							for (int i = (COORD) + (DIR); INCR; i += (DIR)) {\
-								if (\
-									(!this->blocks[IDX]) ||\
-									(!(this->blocks[IDX]->state == BLOCKSTATE_STILL)) ||\
-									(!(this->blocks[IDX]->face == cur->face))\
-								   ) break;\
-								if (IDX+w<w*h) {\
-									if (\
-										(!this->blocks[IDX+w])\
-									   ) break;\
-								}\
-								if (this->blocks[IDX]->state != BLOCKSTATE_STILL) logfile << "aah jerv" << std::endl;\
-								ischain |= this->blocks[IDX]->ischain;\
-								matches++;\
-							}\
-							if (matches > 1) {\
-								if (DEBUGIT_FIELDCHECKBLOCKS) logfile << "Field::chkblo.  " << x << "," << y << " Matching " << DEBUGMSG << "!" << std::endl;\
-								for (int i = COORD; i >= COORD + ((DIR) * matches); i += (DIR)) {\
-									if (!this->blocks[IDX]->matchframe) {\
-										this->blocks[IDX]->matchframe = 1;\
-										totalmatches++;\
-									}\
-								}\
-							}\
-						}
-						DOYOURTHING(blocksleft, x, -1, i >= 0, y*w+i, "to the left");
-						DOYOURTHING(blocksright, x, 1, i < w, y*w+i, "to the right");
-						DOYOURTHING(blocksbelow, y, -1, i < h, i*w+x, "below");
-						DOYOURTHING(blocksabove, y, -1, i >= 0, i*w+x, "above");
+						DOYOURTHING(blocksleft, x, -1, w, true, "to the left", ischain, totalmatches, w, h, cur, x, y);
+						DOYOURTHING(blocksright, x, 1, w, true, "to the right", ischain, totalmatches, w, h, cur, x, y);
+						DOYOURTHING(blocksbelow, y, -1, h, false, "below", ischain, totalmatches, w, h, cur, x, y);
+						DOYOURTHING(blocksabove, y, -1, h, false, "above", ischain, totalmatches, w, h, cur, x, y);
 					}
 				}
 				firstrow = 0;
