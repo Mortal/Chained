@@ -10,14 +10,14 @@ int Popper::draw(float offx, float offy) {
 			facestate = FACESTATE_BLINK;
 		}
 		if (this->framecount >= TIME_POPSTACK_BEFORE) {
-			if DEBUGIT_POPPERDRAW logfile << "Popper::draw	Done blinking, ready to almost pop" << std::endl;
+			if (DEBUGIT_POPPERDRAW) logfile << "Popper::draw	Done blinking, ready to almost pop" << std::endl;
 			this->nowpopping = -1;
 			this->framecount = 0;
 		}
 	} else if (this->nowpopping == -1) {
 		facestate = FACESTATE_CLEAR;
 		if (this->framecount >= TIME_POPSTACK_THEN) {
-			if DEBUGIT_POPPERDRAW logfile << "Popper::draw	We're gonna pop!" << std::endl;
+			if (DEBUGIT_POPPERDRAW) logfile << "Popper::draw	We're gonna pop!" << std::endl;
 			this->nowpopping = 0;
 			this->framecount = 0;
 		}
@@ -25,13 +25,13 @@ int Popper::draw(float offx, float offy) {
 		facestate = FACESTATE_CLEAR;
 		startat = this->nowpopping;
 		if (this->framecount >= TIME_POPSTACK_EACH) {
-			if DEBUGIT_POPPERDRAW logfile << "Popper::draw	*pop* " << this->stackx[this->nowpopping] << "," << this->stacky[this->nowpopping] << std::endl;
+			if (DEBUGIT_POPPERDRAW) logfile << "Popper::draw	*pop* " << this->stackx[this->nowpopping] << "," << this->stacky[this->nowpopping] << std::endl;
 			this->nowpopping++;
 			this->framecount = 0;
 		}
 	}
 	if (this->nowpopping >= this->stacklen) {
-		if DEBUGIT_POPPERDRAW logfile << "Popper::draw	Oh god we're done for!" << std::endl;
+		if (DEBUGIT_POPPERDRAW) logfile << "Popper::draw	Oh god we're done for!" << std::endl;
 		return 1;
 	}
 	if (this->used != this->stacklen) {

@@ -13,12 +13,12 @@ void Field::raisestack() {
 		if (this->speedrising) {
 			raisenow = 1;
 		}
-		if DEBUGIT_FIELDRAISESTACK logfile << "Field::raisest. Speedrising = " << (this->speedrising ? 1 : 0) << std::endl;
+		if (DEBUGIT_FIELDRAISESTACK) logfile << "Field::raisest. Speedrising = " << (this->speedrising ? 1 : 0) << std::endl;
 	}
 	
 	// Raise the stack if we're going to
 	if (raisenow) {
-		if DEBUGIT_FIELDRAISESTACK logfile << "Field::raisest. Oh god we're rising now." << std::endl;
+		if (DEBUGIT_FIELDRAISESTACK) logfile << "Field::raisest. Oh god we're rising now." << std::endl;
 		if (++this->stackoffset > STACKOFFSET_MAX) {
 			this->stackoffset = 0;
 			this->speedrising = 0;
@@ -51,7 +51,7 @@ void Field::raisestack() {
 	}
 	
 	if (stackrising && this->speedrising_key) {
-		if DEBUGIT_FIELDRAISESTACK logfile << "Field::raisest. Gonna speedrise (key)" << std::endl;
+		if (DEBUGIT_FIELDRAISESTACK) logfile << "Field::raisest. Gonna speedrise (key)" << std::endl;
 		this->speedrising = 1;
 	}
 }
@@ -61,7 +61,7 @@ void Field::draw(GLfloat offx, GLfloat offy, GLfloat extray_draw, GLfloat extray
 	int blocky = 0;
 	GLfloat blockw = (GLfloat) 2*BLOCK_WIDTH / SCREEN_WIDTH;
 	GLfloat blockh = (GLfloat) 2*BLOCK_HEIGHT / SCREEN_HEIGHT;
-	if DEBUGIT_FIELDDRAW logfile << "Field::draw	 Drawing field " << this->parentgame->id << "! " << offx << " " << offy << " " << extray_draw << " " << extray_tex << std::endl;
+	if (DEBUGIT_FIELDDRAW) logfile << "Field::draw	 Drawing field " << this->parentgame->id << "! " << offx << " " << offy << " " << extray_draw << " " << extray_tex << std::endl;
 	int height = this->getheight();
 	int width = this->getwidth();
 	for (int i = 0; i < height*width; i++) {
@@ -90,7 +90,7 @@ void Field::draw(GLfloat offx, GLfloat offy, GLfloat extray_draw, GLfloat extray
 }
 
 void Field::swap(int x1, int y1, int x2, int y2) {
-	if DEBUGIT_FIELDSWAP logfile << "Field::swap	 " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
+	if (DEBUGIT_FIELDSWAP) logfile << "Field::swap	 " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
 	int w = getwidth();
 	int idx1 = y1*w+x1;
 	int idx2 = y2*w+x2;
@@ -98,13 +98,13 @@ void Field::swap(int x1, int y1, int x2, int y2) {
 	Block *Block2 = this->blocks[idx2];
 	if ((!Block1 && !Block2) || !(swapable(x1,y1) && swapable(x2,y2))) return;
 	if (!Block1 && Block2) {
-		if DEBUGIT_FIELDSWAP logfile << "Field::swap	 We're moving a block from left to right, right space is currently empty." << std::endl;
+		if (DEBUGIT_FIELDSWAP) logfile << "Field::swap	 We're moving a block from left to right, right space is currently empty." << std::endl;
 		this->swapStack->swap(Block2, x2,y2,x1,y1, 1, this);
 	} else if (Block1 && !Block2) {
-		if DEBUGIT_FIELDSWAP logfile << "Field::swap	 We're moving a block from right to left, left space is currently empty." << std::endl;
+		if (DEBUGIT_FIELDSWAP) logfile << "Field::swap	 We're moving a block from right to left, left space is currently empty." << std::endl;
 		this->swapStack->swap(Block1, x1,y1,x2,y2, 1, this);
 	} else if (Block1 && Block2) {
-		if DEBUGIT_FIELDSWAP logfile << "Field::swap	 We're switching two blocks." << std::endl;
+		if (DEBUGIT_FIELDSWAP) logfile << "Field::swap	 We're switching two blocks." << std::endl;
 		this->swapStack->swap(Block1, x1,y1,x2,y2, 0, this);
 		this->swapStack->swap(Block2, x2,y2,x1,y1, 1, this);
 	} else {
@@ -117,16 +117,16 @@ void Field::rawswap(int x1, int y1, int x2, int y2) {
 	if (y2 != y1) {
 		i++; // BREAK
 	}
-	if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
+	if (DEBUGIT_FIELDRAWSWAP) logfile << "Field::rawswap  " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
 	int w = this->getwidth();
 	int idx1 = y1*w+x1;
 	int idx2 = y2*w+x2;
 	Block *tempblock;
-	if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  -- " << idx1 << " " << this->blocks[idx1] << " <-> " << idx2 << " " << this->blocks[idx2] << std::endl;
+	if (DEBUGIT_FIELDRAWSWAP) logfile << "Field::rawswap  -- " << idx1 << " " << this->blocks[idx1] << " <-> " << idx2 << " " << this->blocks[idx2] << std::endl;
 	tempblock = this->blocks[idx1];
 	this->blocks[idx1] = this->blocks[idx2];
 	this->blocks[idx2] = tempblock;
-	if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  ++ " << idx1 << " " << this->blocks[idx1] << " <-> " << idx2 << " " << this->blocks[idx2] << std::endl;
+	if (DEBUGIT_FIELDRAWSWAP) logfile << "Field::rawswap  ++ " << idx1 << " " << this->blocks[idx1] << " <-> " << idx2 << " " << this->blocks[idx2] << std::endl;
 	//if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  No crash!" << std::endl;
 }
 
@@ -158,7 +158,7 @@ void Field::newfield(int width, int height, int colors, int hasvs) {
 				blockbeneath = this->blocks[newidx+width];
 			}
 			int color = rnd(1, colors-(blockleft?1:0)-(blockbeneath?1:0));
-			if DEBUGIT_NEWFIELD {
+			if (DEBUGIT_NEWFIELD) {
 				logfile << "Field::newfield " << i << "," << j << " " << color << " ";
 				if (blockbeneath || blockleft) {
 					logfile << "(";
@@ -184,7 +184,7 @@ void Field::newfield(int width, int height, int colors, int hasvs) {
 					(blockbeneath && (color >= blockbeneath->face))) {
 				color += 1;
 			}
-			if DEBUGIT_NEWFIELD logfile << "Field::newfield " << color << std::endl;
+			if (DEBUGIT_NEWFIELD) logfile << "Field::newfield " << color << std::endl;
 			curblock->face = color;
 			curblock->state = BLOCKSTATE_STILL;
 			curblock->ischain = 0;

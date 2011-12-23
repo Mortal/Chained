@@ -6,7 +6,8 @@
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
-#include <time.h>
+#include <ctime>
+#include <sstream>
 
 #include "constants.h"
 #include "vkeys.h"
@@ -330,7 +331,10 @@ void loadtexs() {
 				int imgidx = (j == 1 ? IMGMEM_OFFSET0 : (j == 2 ? IMGMEM_OFFSETA : IMGMEM_OFFSETB)) + IMGMEM__FRAMES * i + frameid;
 				logfile << filename << "->" << imgidx << std::endl;
 				std::fstream fin;
-				fin.open(filename, std::ios::in | std::ios::binary);
+				std::stringstream path;
+				//path << "res/";
+				path << filename;
+				fin.open(path.str().c_str(), std::ios::in | std::ios::binary);
 				if (!fin.is_open()) break;
 				
 				int size = BLOCK_SRCWIDTH*BLOCK_SRCHEIGHT*3;
