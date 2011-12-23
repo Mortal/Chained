@@ -1,4 +1,7 @@
 /* vim:set ts=4 sw=4 sts=4 noet: */
+#ifndef CHAINED_SCORINGSYSTEM
+#define CHAINED_SCORINGSYSTEM
+
 class ScoringSystem {
 	public:
 		int combo(int count);
@@ -25,3 +28,4 @@ class SS_Classic_limitchain : public SS_Classic_infchain {
 		int blockpop();
 		int stack();
 };
+#endif

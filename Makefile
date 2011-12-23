@@ -1,12 +1,12 @@
-OBJS=main.o linuxmain.o
+OBJS=main.o linuxmain.o field.o
 
 all: chained
 
-chained: $(OBJS)
-	g++ -g -lX11 -lGL $(OBJS) -o $@
+CXX=g++
+CXXFLAGS=-g -lX11 -lGL
 
-.cpp.o:
-	g++ -g -c $< -o $@
+chained: $(OBJS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(OBJS) -o $@
 
 main.o: main.cpp block.h clearingblock.h constants.h field.h game.h garbage.h img.questionmark.h popper.h root.h scoringsystem.h swap.h tga.h vkeys.h
 linuxmain.o: linuxmain.cpp root.h vkeys.h

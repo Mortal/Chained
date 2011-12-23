@@ -1,6 +1,7 @@
 /* vim:set ts=4 sw=4 sts=4 noet: */
 #include <GL/gl.h>
 #include "root.h"
+#include "scoringsystem.h"
 
 class Game {
 	public:
