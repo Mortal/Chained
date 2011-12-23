@@ -332,7 +332,7 @@ void loadtexs() {
 				logfile << filename << "->" << imgidx << std::endl;
 				std::fstream fin;
 				std::stringstream path;
-				//path << "res/";
+				path << "res/";
 				path << filename;
 				fin.open(path.str().c_str(), std::ios::in | std::ios::binary);
 				if (!fin.is_open()) break;
