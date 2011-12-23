@@ -192,7 +192,33 @@ class Field {
 				this->blocks[idx] = 0;
 			}
 		}
-		int swapable(int x, int y);
+		int swapable(int x, int y) {
+			int w = getwidth();
+			int h = getheight();
+			int idx = y * w + x;
+			if (!blocks[idx]) {
+				if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " doesn't exist!" << std::endl;
+				if (y > 0) {
+					int above = idx-w;
+					if (blocks[above] && blocks[above]->state != BLOCKSTATE_FALLING) {
+						if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " The block above us exists, so we can't be switched!" << std::endl;
+						return 0;
+					}
+				}
+				if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " ...but the aboves are clear so that doesn't matter!" << std::endl;
+				return 1;
+			} else {
+				if (y+1 < h) {
+					int below = idx+w;
+					if (!blocks[below] || blocks[below]->state == BLOCKSTATE_SHH || blocks[below]->face == BLOCKFACE_NOWT) {
+						if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " The block under us doesn't exist, so we can't be switched!" << std::endl;
+						return 0;
+					}
+				}
+				if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " We'll let the local block decide." << std::endl;
+				return blocks[idx]->swapable();
+			}
+		}
 		
 		int curchain;
 		

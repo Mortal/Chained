@@ -293,34 +293,6 @@ void draw() {
 	}
 }
 
-int Field::swapable(int x, int y) {
-	int w = getwidth();
-	int h = getheight();
-	int idx = y * w + x;
-	if (!blocks[idx]) {
-		if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " doesn't exist!" << std::endl;
-		if (y > 0) {
-			int above = idx-w;
-			if (blocks[above] && blocks[above]->state != BLOCKSTATE_FALLING) {
-				if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " The block above us exists, so we can't be switched!" << std::endl;
-				return 0;
-			}
-		}
-		if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " ...but the aboves are clear so that doesn't matter!" << std::endl;
-		return 1;
-	} else {
-		if (y+1 < h) {
-			int below = idx+w;
-			if (!blocks[below] || blocks[below]->state == BLOCKSTATE_SHH || blocks[below]->face == BLOCKFACE_NOWT) {
-				if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " The block under us doesn't exist, so we can't be switched!" << std::endl;
-				return 0;
-			}
-		}
-		if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " We'll let the local block decide." << std::endl;
-		return blocks[idx]->swapable();
-	}
-}
-
 void Field::swap(int x1, int y1, int x2, int y2) {
 	if DEBUGIT_FIELDSWAP logfile << "Field::swap	 " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
 	int w = getwidth();
