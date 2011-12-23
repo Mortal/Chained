@@ -51,9 +51,58 @@ class Field {
 			blocks[idx]->substate = 0;
 			blocks[idx]->ischain = true;
 			return 1;
-}
+		}
 		void newfield(int width, int height, int colors, int hasvs);
-		void newline();
+		void newline() {
+			if (!canraisestack) return;
+			int w = getwidth();
+			int h = getheight();
+			if (!allocnextrow()) {
+				for (int i = 0; i < w; i++) {
+					if (nextrow[i]) {
+						delete nextrow[i];
+						nextrow[i] = 0;
+					}
+				}
+			}
+			int lastface = -1;
+			int *watchout = new int[w];
+			for (int i = 0; i < w; i++) {
+				int idx1 = (h-1)*w+i;
+				int idx2 = (h-2)*w+i;
+				if ((!blocks[idx1]) || (!blocks[idx2])) {
+					watchout[i] = -1;
+				} else if (blocks[idx1]->face == blocks[idx2]->face) {
+					watchout[i] = blocks[idx1]->face;
+				}
+			}
+			for (int i = 0; i < w; i++) {
+				nextrow[i] = new Block;
+				nextrow[i]->state = BLOCKSTATE_WAITING;
+				int count = colors;
+				if (lastface > -1) count--;
+				if (watchout[i] > -1) count--;
+				int newface = rnd(1, count);
+				if (lastface > -1 && watchout[i] > -1) {
+					if	  (newface >= lastface && newface >= watchout[i]) newface += 2;
+					else if (newface >= lastface) {
+						newface += 1;
+						if (newface >= watchout[i]) newface += 1;
+					} else if (newface >= watchout[i]) {
+						newface += 1;
+						if (newface >= lastface) newface += 1;
+					}
+				} else if 
+					((lastface > -1 && (newface >= lastface)) ||
+					 (watchout[i] > -1 && (newface >= watchout[i]))) {
+						newface += 1;
+					}
+				if DEBUGIT_NEWLINE logfile << "Field::newline  Face " << i << ": " << newface << std::endl;
+				nextrow[i]->face = lastface = newface;
+			}
+			delete watchout;
+
+		}
 		class Game *parentgame;
 		void clearmatchframes() {
 			int w = this->getwidth();
