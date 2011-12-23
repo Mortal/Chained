@@ -1,3 +1,4 @@
+/* vim:set ts=4 sw=4 sts=4 noet: */
 #define UNIXNAME "chained"
 #define WINNAME "Chained"
 #define VERSION "0.0.8"

@@ -1,3 +1,4 @@
+/* vim:set ts=4 sw=4 sts=4 noet: */
 class ScoringSystem {
 	public:
 		int combo(int count);

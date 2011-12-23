@@ -1,3 +1,4 @@
+/* vim:set ts=4 sw=4 sts=4 noet: */
 #define VK_OEM_COMMA	0xBC
 #define VK_OEM_PERIOD   0xBE
 #define VK_F1		   0x70

@@ -1,3 +1,4 @@
+/* vim:set ts=4 sw=4 sts=4 noet: */
 // Mortal's Tetris Attack clone, begun May 5th 2007.
 
 #include "winmain.h"

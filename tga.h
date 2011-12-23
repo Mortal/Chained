@@ -1,3 +1,4 @@
+/* vim:set ts=4 sw=4 sts=4 noet: */
 /*
 	Copyright (C) 1999
 	For non-commercial use only.

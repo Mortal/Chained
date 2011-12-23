@@ -1,3 +1,4 @@
+/* vim:set ts=4 sw=4 sts=4 noet: */
 #include "root.h"
 #include "vkeys.h"
 #include <unistd.h> /* usleep() */

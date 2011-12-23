@@ -1,3 +1,4 @@
+/* vim:set ts=4 sw=4 sts=4 noet: */
 #include "scoringsystem.h"
 
 // Classic SNESTA/PDP scoring, except >x13 allowed.
