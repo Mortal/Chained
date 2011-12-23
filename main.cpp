@@ -304,15 +304,6 @@ void Field::raisestack() {
 	}
 }
 
-void Field::deleteblock(int x, int y) {
-	int w = this->getwidth();
-	int idx = y*w+x;
-	if (this->blocks[idx]) {
-		delete this->blocks[idx];
-		this->blocks[idx] = 0;
-	}
-}
-
 void draw() {
 	switch (state) {
 		case STATE_TITLE:

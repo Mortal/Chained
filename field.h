@@ -184,7 +184,14 @@ class Field {
 			if (fallen && DEBUGIT_FIELDFALLBLOCKS) logfile << "Field::fallblo. Blocks fallen: " << fallen << std::endl;
 		}
 		Field();
-		void deleteblock(int x, int y);
+		void deleteblock(int x, int y) {
+			int w = this->getwidth();
+			int idx = y*w+x;
+			if (this->blocks[idx]) {
+				delete this->blocks[idx];
+				this->blocks[idx] = 0;
+			}
+		}
 		int swapable(int x, int y);
 		
 		int curchain;
