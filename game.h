@@ -56,7 +56,8 @@ class Game {
 					break;
 			}
 		}
-		Game() {cursorx = 2; cursory = 4;}
+		Game() : cursorx(2), cursory(4) {
+		}
 		void drawbackground(GLfloat offx, GLfloat offy) {
 			GLfloat w = offx;
 			GLfloat n = offy;
