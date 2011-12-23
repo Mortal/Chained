@@ -293,13 +293,6 @@ void draw() {
 	}
 }
 
-int Block::swapable() {
-	if (this->face == BLOCKFACE_NOWT || this->face == BLOCKFACE_VS || !(this->state == BLOCKSTATE_STILL || this->state == BLOCKSTATE_SWITCHING || this->state == BLOCKSTATE_WILLFALL)) {
-		return 0;
-	}
-	return 1;
-}
-
 int Field::swapable(int x, int y) {
 	int w = getwidth();
 	int h = getheight();

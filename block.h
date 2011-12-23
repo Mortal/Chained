@@ -54,6 +54,11 @@ class Block {
 			glVertex2f (x, y); // NW
 			glEnd();
 		}
-		int swapable();
+		int swapable() {
+			if (this->face == BLOCKFACE_NOWT || this->face == BLOCKFACE_VS || !(this->state == BLOCKSTATE_STILL || this->state == BLOCKSTATE_SWITCHING || this->state == BLOCKSTATE_WILLFALL)) {
+				return 0;
+			}
+			return 1;
+		}
 };
 #endif
