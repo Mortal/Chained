@@ -192,3 +192,20 @@ void Field::newfield(int width, int height, int colors, int hasvs) {
 	}
 	newline();
 }
+
+Field::Field() {
+	this->usedpoppers = 0;
+	this->nextrowfilled = 0;
+	this->nextrow = 0;
+	
+	this->curchain = 1;
+	
+	this->canraisestack = 0;
+	this->speedrising_key = 0;
+	this->speedrising = 0;
+	this->stoptime = 0;
+	this->stackoffset = 0;
+	this->stacktick = 0;
+	
+	this->swapStack = new SwapStack;
+}
