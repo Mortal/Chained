@@ -293,16 +293,6 @@ void draw() {
 	}
 }
 
-GLfloat Field::calcpos(byte dimension, int blocks, int cellnum, int cells) {
-	if (cells <= 0) return (GLfloat) 1.0f;
-	int screenlen = (dimension ? SCREEN_HEIGHT : SCREEN_WIDTH);
-	int sidelen = (dimension ? BLOCK_HEIGHT : BLOCK_WIDTH) * blocks;
-	int space = (screenlen-(cells*sidelen)) / (1+cells);
-	if (space < 0) space = 0;
-	//cout << "  " << screenlen << " " << sidelen << " " << space << endl;
-	return ((GLfloat) ((space * cellnum) + (sidelen * (cellnum-1))) / (GLfloat) screenlen)*2-1;
-}
-
 void init() {
 	logfile.open("log");
 	logfile << WINNAME << " " << VERSION << " log" << std::endl << "Rand_max: " << RAND_MAX << std::endl;

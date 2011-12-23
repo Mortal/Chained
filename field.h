@@ -10,7 +10,15 @@ class Field {
 		void swap(int x1, int y1, int x2, int y2);
 		void rawswap(int x1, int y1, int x2, int y2);
 		void move(int x1, int y1, int x2, int y2);
-		static GLfloat calcpos(byte dimension, int blocks, int cellnum, int cells);
+		static GLfloat calcpos(byte dimension, int blocks, int cellnum, int cells) {
+			if (cells <= 0) return (GLfloat) 1.0f;
+			int screenlen = (dimension ? SCREEN_HEIGHT : SCREEN_WIDTH);
+			int sidelen = (dimension ? BLOCK_HEIGHT : BLOCK_WIDTH) * blocks;
+			int space = (screenlen-(cells*sidelen)) / (1+cells);
+			if (space < 0) space = 0;
+			//cout << "  " << screenlen << " " << sidelen << " " << space << endl;
+			return ((GLfloat) ((space * cellnum) + (sidelen * (cellnum-1))) / (GLfloat) screenlen)*2-1;
+		}
 		void draw(GLfloat offx, GLfloat offy, GLfloat extray_draw, GLfloat extray_tex);
 		int getwidth() { return this->width; }
 		int getheight() { return this->height; }
