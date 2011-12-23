@@ -1,4 +1,6 @@
 /* vim:set ts=4 sw=4 sts=4 noet: */
+#ifndef CHAINED_BLOCK
+#define CHAINED_BLOCK
 #include <GL/gl.h>
 #include "constants.h"
 #include "root.h"
@@ -54,3 +56,4 @@ class Block {
 		}
 		int swapable();
 };
+#endif

@@ -1,4 +1,6 @@
 /* vim:set ts=4 sw=4 sts=4 noet: */
+#ifndef CHAINED_POPPER
+#define CHAINED_POPPER
 #include "constants.h"
 
 class Popper {
@@ -19,3 +21,4 @@ class Popper {
 		int nowpopping;
 		int ischain;
 };
+#endif
