@@ -88,3 +88,26 @@ void Field::draw(GLfloat offx, GLfloat offy, GLfloat extray_draw, GLfloat extray
 		this->nextrow[i]->draw(blockoffx, blockoffy, blockw, blockh, extray_draw, 1-extray_tex);
 	}
 }
+
+void Field::swap(int x1, int y1, int x2, int y2) {
+	if DEBUGIT_FIELDSWAP logfile << "Field::swap	 " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
+	int w = getwidth();
+	int idx1 = y1*w+x1;
+	int idx2 = y2*w+x2;
+	Block *Block1 = this->blocks[idx1];
+	Block *Block2 = this->blocks[idx2];
+	if ((!Block1 && !Block2) || !(swapable(x1,y1) && swapable(x2,y2))) return;
+	if (!Block1 && Block2) {
+		if DEBUGIT_FIELDSWAP logfile << "Field::swap	 We're moving a block from left to right, right space is currently empty." << std::endl;
+		this->swapStack->swap(Block2, x2,y2,x1,y1, 1, this);
+	} else if (Block1 && !Block2) {
+		if DEBUGIT_FIELDSWAP logfile << "Field::swap	 We're moving a block from right to left, left space is currently empty." << std::endl;
+		this->swapStack->swap(Block1, x1,y1,x2,y2, 1, this);
+	} else if (Block1 && Block2) {
+		if DEBUGIT_FIELDSWAP logfile << "Field::swap	 We're switching two blocks." << std::endl;
+		this->swapStack->swap(Block1, x1,y1,x2,y2, 0, this);
+		this->swapStack->swap(Block2, x2,y2,x1,y1, 1, this);
+	} else {
+		logfile << "Field::swap	 -=-WARNING-=- We got in the else-part!" << std::endl;
+	}
+}
