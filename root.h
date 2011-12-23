@@ -1,31 +1,28 @@
+#ifndef CHAINED_ROOT
+#define CHAINED_ROOT
 #include "constants.h"
 #include <fstream>
 
-class Root {
-	public:
-		static int substate;
-		static int state;
-		static int CLOCKS_PER_FRAME;
-		static class Game *game[8];
-		static int numply;
-		static int newnumply;
-		static void KeyDown(int key);
-		static void KeyUp(int key);
-		static int tick();
-		static void draw();
-		static int rnd(int min, int max);
-		static byte paused;
-		static byte goframe;
-		static unsigned int keysheld[256];
-		static int **imgframes;
-		static int imgframes_count;
-		static void init();
-		static void EnableOpenGL();
-		static void DisableOpenGL();
-		static std::ofstream logfile;
-		static void loadtexs();
-	private:
-		static byte rand_is_ready;
-		static void Key(int key, byte repeat);
-		static void initrand();
-};
+extern int substate;
+extern int state;
+extern int CLOCKS_PER_FRAME;
+extern class Game *game[8];
+extern int numply;
+extern int newnumply;
+void Key(int key, byte dir);
+void KeyDown(int key);
+void KeyUp(int key);
+int tick();
+void draw();
+int rnd(int min, int max);
+extern byte paused;
+extern byte goframe;
+extern unsigned int keysheld[256];
+extern int **imgframes;
+extern int imgframes_count;
+void init();
+void EnableOpenGL();
+void DisableOpenGL();
+extern std::ofstream logfile;
+void loadtexs();
+#endif

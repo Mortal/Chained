@@ -21,17 +21,17 @@
 #include "swap.h"
 #include "root.h"
 
-int Root::state = STATE_TITLE;
-int Root::substate = 0;
-byte Root::paused = 0;
-byte Root::goframe = 1;
-int Root::CLOCKS_PER_FRAME = 0;
-Game *Root::game[8] = {0,0,0,0,0,0,0,0};
-int Root::numply = 0;
-int Root::newnumply = 1;
-byte Root::rand_is_ready = 0;
+int state = STATE_TITLE;
+int substate = 0;
+byte paused = 0;
+byte goframe = 1;
+int CLOCKS_PER_FRAME = 0;
+Game *game[8] = {0,0,0,0,0,0,0,0};
+int numply = 0;
+int newnumply = 1;
+byte rand_is_ready = 0;
 #define KEYCOUNT (256)
-unsigned int Root::keysheld[KEYCOUNT] = {
+unsigned int keysheld[KEYCOUNT] = {
 	0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0,
@@ -41,35 +41,35 @@ unsigned int Root::keysheld[KEYCOUNT] = {
 	0,0,0,0,0,0,0,0,
 	0,0,0,0,0,0,0,0
 };
-int **Root::imgframes = 0;
-int Root::imgframes_count = 0;
-std::ofstream Root::logfile("log");
+int **imgframes = 0;
+int imgframes_count = 0;
+std::ofstream logfile("log");
 
-void Root::KeyDown(int key) {
+void KeyDown(int key) {
 	if (key >= KEYCOUNT) return;
 	keysheld[key] = 1;
 	Key(key, KEYTYPE_DOWN);
 }
 
-void Root::KeyUp(int key) {
+void KeyUp(int key) {
 	if (key >= KEYCOUNT) return;
 	keysheld[key] = 0;
 	Key(key, KEYTYPE_UP);
 }
 
-void Root::initrand() {
+void initrand() {
 	time_t seconds;
 	time(&seconds);
 	srand((unsigned int) seconds);
 	rand_is_ready = 1;
 }
 
-int Root::rnd(int min, int max) {
+int rnd(int min, int max) {
 	if (!rand_is_ready) initrand();
 	return (int) (rand() * ((float) (max-min+1) / (float) RAND_MAX)) + min;
 }
 
-void Root::Key(int key, byte dir) {
+void Key(int key, byte dir) {
 	byte repeat = dir == KEYTYPE_REPEAT;
 	int rootkey = 1;
 	switch (state) {
@@ -84,7 +84,7 @@ void Root::Key(int key, byte dir) {
 			
 		break;
 		case STATE_GAME:
-			if DEBUGIT_KEYS Root::logfile << "Root::key	  " << ((char) (key & 0xFF)) << " direction " << ((int) (dir)) << std::endl;
+			if DEBUGIT_KEYS logfile << "key	  " << ((char) (key & 0xFF)) << " direction " << ((int) (dir)) << std::endl;
 			if (dir == KEYTYPE_DOWN) {
 				switch (key) {
 					case VK_F1:
@@ -96,14 +96,14 @@ void Root::Key(int key, byte dir) {
 						state = STATE_TITLE;
 					break;
 					case 'P':
-						if (Root::paused) Root::paused = 0;
+						if (paused) paused = 0;
 						else {
-							Root::goframe = 0;
-							Root::paused = 1;
+							goframe = 0;
+							paused = 1;
 						}
 					break;
 					case 'O':
-						Root::goframe = 1;
+						goframe = 1;
 					break;
 					default:
 						rootkey = 0;
@@ -185,7 +185,7 @@ void Root::Key(int key, byte dir) {
 							break;
 							default:
 								if (DEBUGIT_KEYS || DEBUGIT_KEYS_UNCAUGHT) {
-									Root::logfile << "Uncaught key: " << (char) key << " (" << (int) key << ")" << std::endl;
+									logfile << "Uncaught key: " << (char) key << " (" << (int) key << ")" << std::endl;
 								}
 							break;
 						}
@@ -196,7 +196,7 @@ void Root::Key(int key, byte dir) {
 		case STATE_DEBUG:
 			char *stuf = new char[256];
 			sprintf(stuf, "Key: %c %u %#X", (key) & 0xFF, key, key);
-			Root::logfile << "Root::key	  " << stuf << std::endl;
+			logfile << "key	  " << stuf << std::endl;
 			delete stuf;
 			stuf = 0;
 		break;
@@ -204,7 +204,7 @@ void Root::Key(int key, byte dir) {
 }
 
 void Game::key(int which, byte dir) {
-	if DEBUGIT_KEYS Root::logfile << "Game::key	  Game " << which << " direction " << (int) dir << std::endl;
+	if DEBUGIT_KEYS logfile << "Game::key	  Game " << which << " direction " << (int) dir << std::endl;
 	switch (which) {
 		case GAMEKEY_LEFT:
 			if (dir == KEYTYPE_UP) break;
@@ -237,10 +237,10 @@ void Game::key(int which, byte dir) {
 	}
 }
 
-int Root::tick() {
-	if (Root::paused) {
-		if (!Root::goframe) return 1;
-		Root::goframe = 0;
+int tick() {
+	if (paused) {
+		if (!goframe) return 1;
+		goframe = 0;
 	}
 	for (int i = 0; i < 256; i++) {
 		if (keysheld[i] >= KEYTOHOLD) {
@@ -287,7 +287,7 @@ int SwapStack::swapCount() {
 	int count = 0;
 	for (int i = 0; i < stacklen; i++) {
 		if (stack[i]) {
-			if DEBUGIT_SWAPSTACKSWAPCOUNT Root::logfile << "SwSt::swCount   stack[" << i << "] is in use: " << stack[i] << std::endl;
+			if DEBUGIT_SWAPSTACKSWAPCOUNT logfile << "SwSt::swCount   stack[" << i << "] is in use: " << stack[i] << std::endl;
 			count++;
 		}
 	}
@@ -300,7 +300,7 @@ int Field::notStillCount() {
 	n *= getheight();
 	for (int i = 0; i < n; i++) {
 		if (blocks[i] && blocks[i]->state != BLOCKSTATE_STILL) {
-			if DEBUGIT_FIELDPOPPERCOUNT Root::logfile << "Field::fallC.   poppers[" << i << "] is in use and not still: " << poppers[i] << std::endl;
+			if DEBUGIT_FIELDPOPPERCOUNT logfile << "Field::fallC.   poppers[" << i << "] is in use and not still: " << poppers[i] << std::endl;
 			count++;
 		}
 	}
@@ -317,12 +317,12 @@ void Field::raisestack() {
 		if (this->speedrising) {
 			raisenow = 1;
 		}
-		if DEBUGIT_FIELDRAISESTACK Root::logfile << "Field::raisest. Speedrising = " << (this->speedrising ? 1 : 0) << std::endl;
+		if DEBUGIT_FIELDRAISESTACK logfile << "Field::raisest. Speedrising = " << (this->speedrising ? 1 : 0) << std::endl;
 	}
 	
 	// Raise the stack if we're going to
 	if (raisenow) {
-		if DEBUGIT_FIELDRAISESTACK Root::logfile << "Field::raisest. Oh god we're rising now." << std::endl;
+		if DEBUGIT_FIELDRAISESTACK logfile << "Field::raisest. Oh god we're rising now." << std::endl;
 		if (++this->stackoffset > STACKOFFSET_MAX) {
 			this->stackoffset = 0;
 			this->speedrising = 0;
@@ -355,7 +355,7 @@ void Field::raisestack() {
 	}
 	
 	if (stackrising && this->speedrising_key) {
-		if DEBUGIT_FIELDRAISESTACK Root::logfile << "Field::raisest. Gonna speedrise (key)" << std::endl;
+		if DEBUGIT_FIELDRAISESTACK logfile << "Field::raisest. Gonna speedrise (key)" << std::endl;
 		this->speedrising = 1;
 	}
 }
@@ -385,7 +385,7 @@ void Field::checkblocks() {
 				int blocksright = w-x-1;
 				int blocksbelow = y;
 				int blocksabove = h-y-1;
-				//if DEBUGIT_FIELDCHECKBLOCKS Root::logfile << "Field::chkblo.  " << x << "," << y << " Blocks left,right,above,below = " << blocksleft << "," << blocksright << "," << blocksabove << "," << blocksbelow << std::endl;
+				//if DEBUGIT_FIELDCHECKBLOCKS logfile << "Field::chkblo.  " << x << "," << y << " Blocks left,right,above,below = " << blocksleft << "," << blocksright << "," << blocksabove << "," << blocksbelow << std::endl;
 				
 				#define DOYOURTHING(blocksDIR, COORD, DIR, INCR, IDX, DEBUGMSG) \
 				if (blocksDIR > 1) {\
@@ -401,12 +401,12 @@ void Field::checkblocks() {
 								(!this->blocks[IDX+w])\
 							) break;\
 						}\
-						if (this->blocks[IDX]->state != BLOCKSTATE_STILL) Root::logfile << "aah jerv" << std::endl;\
+						if (this->blocks[IDX]->state != BLOCKSTATE_STILL) logfile << "aah jerv" << std::endl;\
 						ischain |= this->blocks[IDX]->ischain;\
 						matches++;\
 					}\
 					if (matches > 1) {\
-						if DEBUGIT_FIELDCHECKBLOCKS Root::logfile << "Field::chkblo.  " << x << "," << y << " Matching " << DEBUGMSG << "!" << std::endl;\
+						if DEBUGIT_FIELDCHECKBLOCKS logfile << "Field::chkblo.  " << x << "," << y << " Matching " << DEBUGMSG << "!" << std::endl;\
 						for (int i = COORD; i >= COORD + ((DIR) * matches); i += (DIR)) {\
 							if (!this->blocks[IDX]->matchframe) {\
 								this->blocks[IDX]->matchframe = 1;\
@@ -424,7 +424,7 @@ void Field::checkblocks() {
 		firstrow = 0;
 	}
 	if (totalmatches) {
-		if DEBUGIT_FIELDCHECKBLOCKS Root::logfile << "Field::chkblo.  Alright, we have " << totalmatches << " matches." << std::endl;
+		if DEBUGIT_FIELDCHECKBLOCKS logfile << "Field::chkblo.  Alright, we have " << totalmatches << " matches." << std::endl;
 		int popperid = -1;
 		for (int i = 0; i < this->usedpoppers; i++) {
 			if (!this->poppers[i]) {popperid = i; break;}
@@ -433,13 +433,13 @@ void Field::checkblocks() {
 			popperid = this->usedpoppers++;
 		}
 		if (popperid < MAXPOPPERS) {
-			if DEBUGIT_FIELDCHECKBLOCKS Root::logfile << "Field::chkblo.  popperid = " << popperid << std::endl;
+			if DEBUGIT_FIELDCHECKBLOCKS logfile << "Field::chkblo.  popperid = " << popperid << std::endl;
 			Popper *popper;
 			popper = new Popper(totalmatches, this);
 			for (int y = 0; y < h; y++) {
 				for (int x = 0; x < w; x++) {
 					if (this->blocks[y*w+x] && this->blocks[y*w+x]->matchframe) {
-						if DEBUGIT_FIELDCHECKBLOCKS Root::logfile << "Field::chkblo.  Adding " << x << "," << y << std::endl;
+						if DEBUGIT_FIELDCHECKBLOCKS logfile << "Field::chkblo.  Adding " << x << "," << y << std::endl;
 						popper->addblock(this->blocks[y*w+x], x, y);
 					}
 				}
@@ -464,11 +464,11 @@ void Field::fallblocks() {
 					case BLOCKSTATE_STILL:
 						if (!firstrow) {
 							if (!beneath) {
-								if DEBUGIT_FIELDFALLBLOCKS Root::logfile << "Field::fallblo. " << x << "," << y << " We're gonna fall!" << std::endl;
+								if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " We're gonna fall!" << std::endl;
 								cur->state = BLOCKSTATE_WILLFALL;
 								cur->substate = 0;
 							} else if (beneath->state == BLOCKSTATE_WILLFALL || beneath->state == BLOCKSTATE_FALLING) {
-								if DEBUGIT_FIELDFALLBLOCKS Root::logfile << "Field::fallblo. " << x << "," << y << " We're gonna fall along with the block beneath us." << std::endl;
+								if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " We're gonna fall along with the block beneath us." << std::endl;
 								cur->state = BLOCKSTATE_WILLFALL;
 								cur->substate = ((beneath->state == BLOCKSTATE_WILLFALL) ? beneath->substate : 0);
 							}
@@ -477,11 +477,11 @@ void Field::fallblocks() {
 					case BLOCKSTATE_WILLFALL:
 						if (!firstrow) {
 							if (beneath && beneath->state != BLOCKSTATE_FALLING && beneath->state != BLOCKSTATE_WILLFALL) {
-								if DEBUGIT_FIELDFALLBLOCKS Root::logfile << "Field::fallblo. " << x << "," << y << " Apparently, we can't fall anyway, something's beneath us." << std::endl;
+								if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " Apparently, we can't fall anyway, something's beneath us." << std::endl;
 								cur->state = BLOCKSTATE_STILL;
 								cur->substate = 0;
 							} else if (++cur->substate >= TIME_FALL_BEFORE) {
-								if DEBUGIT_FIELDFALLBLOCKS Root::logfile << "Field::fallblo. " << x << "," << y << " We're falling!" << std::endl;
+								if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " We're falling!" << std::endl;
 								cur->state = BLOCKSTATE_FALLING;
 								cur = 0;
 							}
@@ -489,11 +489,11 @@ void Field::fallblocks() {
 					break;
 					case BLOCKSTATE_FALLING:
 						if (beneath || firstrow) {
-							if DEBUGIT_FIELDFALLBLOCKS Root::logfile << "Field::fallblo. " << x << "," << y << " Plonk. Stopped falling." << std::endl;
+							if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " Plonk. Stopped falling." << std::endl;
 							cur->state = BLOCKSTATE_STILL;
 							cur->substate = 0;
 						} else {
-							if DEBUGIT_FIELDFALLBLOCKS Root::logfile << "Field::fallblo. " << x << "," << y << " Falling a step." << std::endl;
+							if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " Falling a step." << std::endl;
 							this->rawswap(x,y,x,y+1);
 							fallen++;
 							cur = 0;
@@ -504,7 +504,7 @@ void Field::fallblocks() {
 		}
 		firstrow = 0;
 	}
-	if (fallen && DEBUGIT_FIELDFALLBLOCKS) Root::logfile << "Field::fallblo. Blocks fallen: " << fallen << std::endl;
+	if (fallen && DEBUGIT_FIELDFALLBLOCKS) logfile << "Field::fallblo. Blocks fallen: " << fallen << std::endl;
 }
 
 byte Field::blockfallchain(int x, int y) {
@@ -517,7 +517,7 @@ byte Field::blockfallchain(int x, int y) {
 		return 0;
 	}
 	int idx = y*getwidth()+x;
-	if (!blocks[idx]) Root::logfile << "Field::bl.fl.ch " << __LINE__ << ": We're gonna crash." << std::endl;
+	if (!blocks[idx]) logfile << "Field::bl.fl.ch " << __LINE__ << ": We're gonna crash." << std::endl;
 	blocks[idx]->state = BLOCKSTATE_WILLFALL;
 	blocks[idx]->substate = 0;
 	blocks[idx]->ischain = true;
@@ -533,7 +533,7 @@ void Field::deleteblock(int x, int y) {
 	}
 }
 
-void Root::draw() {
+void draw() {
 	switch (state) {
 		case STATE_TITLE:
 			
@@ -553,20 +553,20 @@ void Root::draw() {
 				glBegin (GL_QUADS);
 				float x = 2*(-0.5f + ((1.0f+(2.0f*(j-(float) 1)))*(float) BLOCK_WIDTH)/(float) SCREEN_WIDTH);
 				float y = 2*(0.5f - (float) BLOCK_HEIGHT/(float) SCREEN_HEIGHT);
-				if DEBUGIT_ROOTDRAW Root::logfile << "Root::draw	  " << x << "," << y << " ";
+				if DEBUGIT_ROOTDRAW logfile << "draw	  " << x << "," << y << " ";
 				glTexCoord2f (0.0f, 0.0f);
 				glVertex2f (x, y); // NW
 				float oldy = y;
 				y = 2*(0.5f - (float) 2*(float) BLOCK_HEIGHT/(float) SCREEN_HEIGHT);
-				if DEBUGIT_ROOTDRAW Root::logfile << "Root::draw	  " << x << "," << y << " ";
+				if DEBUGIT_ROOTDRAW logfile << "draw	  " << x << "," << y << " ";
 				glTexCoord2f (0.0f, 1.0f);
 				glVertex2f (x, y); // NE
 				x = 2*(-0.5f + ((2.0f+(2.0f*(j-1.0f)))*(float) BLOCK_WIDTH)/(float) SCREEN_WIDTH);
-				if DEBUGIT_ROOTDRAW Root::logfile << "Root::draw	  " << x << "," << y << " ";
+				if DEBUGIT_ROOTDRAW logfile << "draw	  " << x << "," << y << " ";
 				glTexCoord2f (1.0f, 1.0f);
 				glVertex2f (x, y); // SE
 				y = oldy;
-				if DEBUGIT_ROOTDRAW Root::logfile << "Root::draw	  " << x << "," << y << std::endl;
+				if DEBUGIT_ROOTDRAW logfile << "draw	  " << x << "," << y << std::endl;
 				glTexCoord2f (1.0f, 0.0f);
 				glVertex2f (x, y); // SW
 				glEnd ();
@@ -606,9 +606,9 @@ void Game::drawbackground(GLfloat offx, GLfloat offy) {
 		glVertex2f(w, s);
 	glEnd();
 	
-	if DEBUGIT_DRAWBACKGROUND Root::logfile << "Game::drawbg.   " << this->id << " " << n << " " << s << " " << w << " " << e << std::endl;
-	if DEBUGIT_DRAWBACKGROUND Root::logfile << "Game::drawbg.   " << this->id << " " << n*SCREEN_HEIGHT << " " << s*SCREEN_HEIGHT << " " << w*SCREEN_WIDTH << " " << e*SCREEN_WIDTH << std::endl;
-	if DEBUGIT_DRAWBACKGROUND Root::logfile << "Game::drawbg.   " << this->id << " " << (n-s)*SCREEN_HEIGHT << " " << (e-w)*SCREEN_WIDTH << std::endl;
+	if DEBUGIT_DRAWBACKGROUND logfile << "Game::drawbg.   " << this->id << " " << n << " " << s << " " << w << " " << e << std::endl;
+	if DEBUGIT_DRAWBACKGROUND logfile << "Game::drawbg.   " << this->id << " " << n*SCREEN_HEIGHT << " " << s*SCREEN_HEIGHT << " " << w*SCREEN_WIDTH << " " << e*SCREEN_WIDTH << std::endl;
+	if DEBUGIT_DRAWBACKGROUND logfile << "Game::drawbg.   " << this->id << " " << (n-s)*SCREEN_HEIGHT << " " << (e-w)*SCREEN_WIDTH << std::endl;
 }
 
 void Game::drawcursors(GLfloat offx, GLfloat offy) {
@@ -627,7 +627,7 @@ void Game::drawcursors(GLfloat offx, GLfloat offy) {
 	offx += (GLfloat) 2 * (BLOCK_WIDTH) / (GLfloat) SCREEN_WIDTH;
 	GLfloat rightw = offx + 2 * (CURSOR_PADDING / (GLfloat) SCREEN_WIDTH);
 	GLfloat righte = offx - 2 * ((CURSOR_MARGIN) / (GLfloat) SCREEN_WIDTH);
-	if DEBUGIT_GAMEDRAW Root::logfile << "Game::drawcurs. " << offy << " " << topn << " " << tops << " " << bottomn <<
+	if DEBUGIT_GAMEDRAW logfile << "Game::drawcurs. " << offy << " " << topn << " " << tops << " " << bottomn <<
 		" " << bottoms << "  " << offx << " " << leftw << " " << lefte << " " << 
 		midw << " " << mide << " " << rightw << " " << righte << std::endl;
 	
@@ -679,7 +679,7 @@ void Field::draw(GLfloat offx, GLfloat offy, GLfloat extray_draw, GLfloat extray
 	int blocky = 0;
 	GLfloat blockw = (GLfloat) 2*BLOCK_WIDTH / SCREEN_WIDTH;
 	GLfloat blockh = (GLfloat) 2*BLOCK_HEIGHT / SCREEN_HEIGHT;
-	if DEBUGIT_FIELDDRAW Root::logfile << "Field::draw	 Drawing field " << this->parentgame->id << "! " << offx << " " << offy << " " << extray_draw << " " << extray_tex << std::endl;
+	if DEBUGIT_FIELDDRAW logfile << "Field::draw	 Drawing field " << this->parentgame->id << "! " << offx << " " << offy << " " << extray_draw << " " << extray_tex << std::endl;
 	int height = this->getheight();
 	int width = this->getwidth();
 	for (int i = 0; i < height*width; i++) {
@@ -709,14 +709,14 @@ void Field::draw(GLfloat offx, GLfloat offy, GLfloat extray_draw, GLfloat extray
 
 void Block::draw(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLfloat extray_draw, GLfloat extray_tex) {
 	if (this->face == BLOCKFACE_NOWT || this->face == BLOCKFACE_GARBAGE) return;
-	if DEBUGIT_BLOCKDRAW Root::logfile << "Block::draw	 ---- " << x << " " << y << " " << w << " " << h << std::endl;
+	if DEBUGIT_BLOCKDRAW logfile << "Block::draw	 ---- " << x << " " << y << " " << w << " " << h << std::endl;
 	int face = 0;
 	if (this->facestate == FACESTATE_NORMAL) face += IMGMEM_OFFSET0;
 	else if (this->facestate == FACESTATE_BLINK) face += IMGMEM_OFFSETA;
 	else if (this->facestate == FACESTATE_CLEAR) face += IMGMEM_OFFSETB;
 	else face = 0;
 	face += IMGMEM__FRAMES * this->face;
-	if DEBUGIT_BLOCKDRAW Root::logfile << "Block::draw	 Face = " << face << std::endl;
+	if DEBUGIT_BLOCKDRAW logfile << "Block::draw	 Face = " << face << std::endl;
 	glBindTexture (GL_TEXTURE_2D, face);
 	y += h; x += w;
 	glBegin (GL_QUADS);
@@ -775,14 +775,14 @@ int Popper::draw(float offx, float offy) {
 			facestate = FACESTATE_BLINK;
 		}
 		if (this->framecount >= TIME_POPSTACK_BEFORE) {
-			if DEBUGIT_POPPERDRAW Root::logfile << "Popper::draw	Done blinking, ready to almost pop" << std::endl;
+			if DEBUGIT_POPPERDRAW logfile << "Popper::draw	Done blinking, ready to almost pop" << std::endl;
 			this->nowpopping = -1;
 			this->framecount = 0;
 		}
 	} else if (this->nowpopping == -1) {
 		facestate = FACESTATE_CLEAR;
 		if (this->framecount >= TIME_POPSTACK_THEN) {
-			if DEBUGIT_POPPERDRAW Root::logfile << "Popper::draw	We're gonna pop!" << std::endl;
+			if DEBUGIT_POPPERDRAW logfile << "Popper::draw	We're gonna pop!" << std::endl;
 			this->nowpopping = 0;
 			this->framecount = 0;
 		}
@@ -790,17 +790,17 @@ int Popper::draw(float offx, float offy) {
 		facestate = FACESTATE_CLEAR;
 		startat = this->nowpopping;
 		if (this->framecount >= TIME_POPSTACK_EACH) {
-			if DEBUGIT_POPPERDRAW Root::logfile << "Popper::draw	*pop* " << this->stackx[this->nowpopping] << "," << this->stacky[this->nowpopping] << std::endl;
+			if DEBUGIT_POPPERDRAW logfile << "Popper::draw	*pop* " << this->stackx[this->nowpopping] << "," << this->stacky[this->nowpopping] << std::endl;
 			this->nowpopping++;
 			this->framecount = 0;
 		}
 	}
 	if (this->nowpopping >= this->stacklen) {
-		if DEBUGIT_POPPERDRAW Root::logfile << "Popper::draw	Oh god we're done for!" << std::endl;
+		if DEBUGIT_POPPERDRAW logfile << "Popper::draw	Oh god we're done for!" << std::endl;
 		return 1;
 	}
 	if (this->used != this->stacklen) {
-		Root::logfile << "Popper::draw	-=-WARNING-=- We didn't get all our blocks yet! I don't know how this happened, but we only got " << this->used << "/" << this->stacklen << " and we're going LIVE NOW! D: Embrace yourselves!" << std::endl;
+		logfile << "Popper::draw	-=-WARNING-=- We didn't get all our blocks yet! I don't know how this happened, but we only got " << this->used << "/" << this->stacklen << " and we're going LIVE NOW! D: Embrace yourselves!" << std::endl;
 	}
 	for (int i = startat; i < this->stacklen; i++) {
 		GLfloat blockoffx = offx + 2*((GLfloat) (BLOCK_WIDTH * this->stackx[i]) / (GLfloat) SCREEN_WIDTH);
@@ -823,31 +823,31 @@ int Field::swapable(int x, int y) {
 	int h = getheight();
 	int idx = y * w + x;
 	if (!blocks[idx]) {
-		if DEBUGIT_FIELDSWAPABLE Root::logfile << "Field::swapable " << x << "," << y << " doesn't exist!" << std::endl;
+		if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " doesn't exist!" << std::endl;
 		if (y > 0) {
 			int above = idx-w;
 			if (blocks[above] && blocks[above]->state != BLOCKSTATE_FALLING) {
-				if DEBUGIT_FIELDSWAPABLE Root::logfile << "Field::swapable " << x << "," << y << " The block above us exists, so we can't be switched!" << std::endl;
+				if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " The block above us exists, so we can't be switched!" << std::endl;
 				return 0;
 			}
 		}
-		if DEBUGIT_FIELDSWAPABLE Root::logfile << "Field::swapable " << x << "," << y << " ...but the aboves are clear so that doesn't matter!" << std::endl;
+		if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " ...but the aboves are clear so that doesn't matter!" << std::endl;
 		return 1;
 	} else {
 		if (y+1 < h) {
 			int below = idx+w;
 			if (!blocks[below] || blocks[below]->state == BLOCKSTATE_SHH || blocks[below]->face == BLOCKFACE_NOWT) {
-				if DEBUGIT_FIELDSWAPABLE Root::logfile << "Field::swapable " << x << "," << y << " The block under us doesn't exist, so we can't be switched!" << std::endl;
+				if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " The block under us doesn't exist, so we can't be switched!" << std::endl;
 				return 0;
 			}
 		}
-		if DEBUGIT_FIELDSWAPABLE Root::logfile << "Field::swapable " << x << "," << y << " We'll let the local block decide." << std::endl;
+		if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " We'll let the local block decide." << std::endl;
 		return blocks[idx]->swapable();
 	}
 }
 
 void Field::swap(int x1, int y1, int x2, int y2) {
-	if DEBUGIT_FIELDSWAP Root::logfile << "Field::swap	 " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
+	if DEBUGIT_FIELDSWAP logfile << "Field::swap	 " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
 	int w = getwidth();
 	int idx1 = y1*w+x1;
 	int idx2 = y2*w+x2;
@@ -855,17 +855,17 @@ void Field::swap(int x1, int y1, int x2, int y2) {
 	Block *Block2 = this->blocks[idx2];
 	if ((!Block1 && !Block2) || !(swapable(x1,y1) && swapable(x2,y2))) return;
 	if (!Block1 && Block2) {
-		if DEBUGIT_FIELDSWAP Root::logfile << "Field::swap	 We're moving a block from left to right, right space is currently empty." << std::endl;
+		if DEBUGIT_FIELDSWAP logfile << "Field::swap	 We're moving a block from left to right, right space is currently empty." << std::endl;
 		this->swapStack->swap(Block2, x2,y2,x1,y1, 1, this);
 	} else if (Block1 && !Block2) {
-		if DEBUGIT_FIELDSWAP Root::logfile << "Field::swap	 We're moving a block from right to left, left space is currently empty." << std::endl;
+		if DEBUGIT_FIELDSWAP logfile << "Field::swap	 We're moving a block from right to left, left space is currently empty." << std::endl;
 		this->swapStack->swap(Block1, x1,y1,x2,y2, 1, this);
 	} else if (Block1 && Block2) {
-		if DEBUGIT_FIELDSWAP Root::logfile << "Field::swap	 We're switching two blocks." << std::endl;
+		if DEBUGIT_FIELDSWAP logfile << "Field::swap	 We're switching two blocks." << std::endl;
 		this->swapStack->swap(Block1, x1,y1,x2,y2, 0, this);
 		this->swapStack->swap(Block2, x2,y2,x1,y1, 1, this);
 	} else {
-		Root::logfile << "Field::swap	 -=-WARNING-=- We got in the else-part!" << std::endl;
+		logfile << "Field::swap	 -=-WARNING-=- We got in the else-part!" << std::endl;
 	}
 }
 
@@ -874,51 +874,51 @@ void Field::rawswap(int x1, int y1, int x2, int y2) {
 	if (y2 != y1) {
 		i++; // BREAK
 	}
-	if DEBUGIT_FIELDRAWSWAP Root::logfile << "Field::rawswap  " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
+	if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
 	int w = this->getwidth();
 	int idx1 = y1*w+x1;
 	int idx2 = y2*w+x2;
 	Block *tempblock;
-	if DEBUGIT_FIELDRAWSWAP Root::logfile << "Field::rawswap  -- " << idx1 << " " << this->blocks[idx1] << " <-> " << idx2 << " " << this->blocks[idx2] << std::endl;
+	if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  -- " << idx1 << " " << this->blocks[idx1] << " <-> " << idx2 << " " << this->blocks[idx2] << std::endl;
 	tempblock = this->blocks[idx1];
 	this->blocks[idx1] = this->blocks[idx2];
 	this->blocks[idx2] = tempblock;
-	if DEBUGIT_FIELDRAWSWAP Root::logfile << "Field::rawswap  ++ " << idx1 << " " << this->blocks[idx1] << " <-> " << idx2 << " " << this->blocks[idx2] << std::endl;
-	//if DEBUGIT_FIELDRAWSWAP Root::logfile << "Field::rawswap  No crash!" << std::endl;
+	if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  ++ " << idx1 << " " << this->blocks[idx1] << " <-> " << idx2 << " " << this->blocks[idx2] << std::endl;
+	//if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  No crash!" << std::endl;
 }
 
 void SwapStack::swap(Block *block, int fromx, int fromy, int tox, int toy, byte switchblock, Field *parent) {
 	if (!block) {
-		if DEBUGIT_SWAPSTACKSWAP Root::logfile << "SwapStack::swap Oh my, nullpointered block." << std::endl;
+		if DEBUGIT_SWAPSTACKSWAP logfile << "SwapStack::swap Oh my, nullpointered block." << std::endl;
 		return;
 	}
 	if (!block->swapable()) {
-		if DEBUGIT_SWAPSTACKSWAP Root::logfile << "SwapStack::swap Oh my, block not swap(p)able." << std::endl;
+		if DEBUGIT_SWAPSTACKSWAP logfile << "SwapStack::swap Oh my, block not swap(p)able." << std::endl;
 		return;
 	}
 	block->state = BLOCKSTATE_SWITCHING;
-	if (DEBUGIT_SWAPSTACKSWAP || DEBUGIT_SWAPSTACKSWAP_MEMORY) Root::logfile << "SwapStack::swap Starting." << std::endl;
+	if (DEBUGIT_SWAPSTACKSWAP || DEBUGIT_SWAPSTACKSWAP_MEMORY) logfile << "SwapStack::swap Starting." << std::endl;
 	int idx = -1;
 	for (int i = 0; i < stacklen; i++) {
 		if (stack[i]) continue;
-		if DEBUGIT_SWAPSTACKSWAP_MEMORY Root::logfile << "SwapStack::swap -- We got an unused swapstack index, " << i << ". We'll use that." << std::endl;
+		if DEBUGIT_SWAPSTACKSWAP_MEMORY logfile << "SwapStack::swap -- We got an unused swapstack index, " << i << ". We'll use that." << std::endl;
 		idx = i;
 		break;
 	}
 	if (idx < 0) {
 		if (stacklen >= MAXSWAPS) {
-			if DEBUGIT_SWAPSTACKSWAP_MEMORY Root::logfile << "SwapStack::swap canceled! oh my, we ran out of swaps." << std::endl;
+			if DEBUGIT_SWAPSTACKSWAP_MEMORY logfile << "SwapStack::swap canceled! oh my, we ran out of swaps." << std::endl;
 			return;
 		}
 		stacklen++;
 		idx = stacklen-1;
 	}
 	if (idx < 0) {
-		if DEBUGIT_SWAPSTACKSWAP_MEMORY Root::logfile << "SwapStack::swap -- Hmm! idx is still lower than 0 even though we went through making a new stack and all. " << idx << std::endl;
+		if DEBUGIT_SWAPSTACKSWAP_MEMORY logfile << "SwapStack::swap -- Hmm! idx is still lower than 0 even though we went through making a new stack and all. " << idx << std::endl;
 	}
-	if DEBUGIT_SWAPSTACKSWAP_MEMORY Root::logfile << "SwapStack::swap -- stack[idx = " << idx << "] = new Swap(block = " << block << ", fromx,y,tox,y = " << fromx << "," << fromy << "," << tox << "," << toy << ")" << std::endl;
+	if DEBUGIT_SWAPSTACKSWAP_MEMORY logfile << "SwapStack::swap -- stack[idx = " << idx << "] = new Swap(block = " << block << ", fromx,y,tox,y = " << fromx << "," << fromy << "," << tox << "," << toy << ")" << std::endl;
 	stack[idx] = new Swap(block, fromx, fromy, tox, toy, switchblock, parent);
-	if (DEBUGIT_SWAPSTACKSWAP || DEBUGIT_SWAPSTACKSWAP_MEMORY) Root::logfile << "SwapStack::swap ending." << std::endl;
+	if (DEBUGIT_SWAPSTACKSWAP || DEBUGIT_SWAPSTACKSWAP_MEMORY) logfile << "SwapStack::swap ending." << std::endl;
 }
 
 Swap::Swap(Block *block_, int fromx_, int fromy_, int tox_, int toy_, byte switchblock_, class Field *parentfield_) {
@@ -931,10 +931,10 @@ Swap::Swap(Block *block_, int fromx_, int fromy_, int tox_, int toy_, byte switc
 	this->parentfield = parentfield_;
 	this->frame = 0;
 	if (this->switchblock) {
-		if DEBUGIT_SWAPCONSTRUCT Root::logfile << "Swap::Swap	  Rawswapping (" << (int) this->switchblock << ") " << fromx << "," << fromy << " " << tox << "," << toy << std::endl;
+		if DEBUGIT_SWAPCONSTRUCT logfile << "Swap::Swap	  Rawswapping (" << (int) this->switchblock << ") " << fromx << "," << fromy << " " << tox << "," << toy << std::endl;
 		this->parentfield->rawswap(fromx,fromy,tox,toy);
 	} else {
-		if DEBUGIT_SWAPCONSTRUCT Root::logfile << "Swap::Swap	  Not rawswapping (" << (int) this->switchblock << ") " << fromx << "," << fromy << " " << tox << "," << toy << std::endl;
+		if DEBUGIT_SWAPCONSTRUCT logfile << "Swap::Swap	  Not rawswapping (" << (int) this->switchblock << ") " << fromx << "," << fromy << " " << tox << "," << toy << std::endl;
 	}
 }
 
@@ -947,7 +947,7 @@ void Popper::addblock(Block *block, int x, int y) {
 	block->state = BLOCKSTATE_POPPING;
 	if (!ischain) {
 		if (block->ischain) ischain = 1;
-		if (DEBUGIT_POPPERADD && ischain) Root::logfile << "Swap::addblock  Oh my, added a chain block." << std::endl;
+		if (DEBUGIT_POPPERADD && ischain) logfile << "Swap::addblock  Oh my, added a chain block." << std::endl;
 	}
 }
 
@@ -1033,7 +1033,7 @@ void Field::newfield(int width, int height, int colors, int hasvs) {
 		for (int i = 0; i < width; i++) {
 			int newidx = (width*(height-j-1))+i;
 			if (this->blocks[newidx]) {
-				Root::logfile << "Field::newfield Hmm! Field->blocks[" << newidx << "] already set!" << std::endl;
+				logfile << "Field::newfield Hmm! Field->blocks[" << newidx << "] already set!" << std::endl;
 				delete this->blocks[newidx];
 				this->blocks[newidx] = 0;
 			}
@@ -1044,17 +1044,17 @@ void Field::newfield(int width, int height, int colors, int hasvs) {
 			else {
 				blockbeneath = this->blocks[newidx+width];
 			}
-			int color = Root::rnd(1, colors-(blockleft?1:0)-(blockbeneath?1:0));
+			int color = rnd(1, colors-(blockleft?1:0)-(blockbeneath?1:0));
 			if DEBUGIT_NEWFIELD {
-				Root::logfile << "Field::newfield " << i << "," << j << " " << color << " ";
+				logfile << "Field::newfield " << i << "," << j << " " << color << " ";
 				if (blockbeneath || blockleft) {
-					Root::logfile << "(";
+					logfile << "(";
 					if (blockleft) {
-						Root::logfile << "left " << blockleft->face;
-						if (blockbeneath) Root::logfile << ", ";
+						logfile << "left " << blockleft->face;
+						if (blockbeneath) logfile << ", ";
 					}
-					if (blockbeneath) Root::logfile << "under " << blockbeneath->face;
-					Root::logfile << ") ";
+					if (blockbeneath) logfile << "under " << blockbeneath->face;
+					logfile << ") ";
 				}
 			}
 			if (blockleft && blockbeneath) {
@@ -1071,7 +1071,7 @@ void Field::newfield(int width, int height, int colors, int hasvs) {
 					(blockbeneath && (color >= blockbeneath->face))) {
 				color += 1;
 			}
-			if DEBUGIT_NEWFIELD Root::logfile << "Field::newfield " << color << std::endl;
+			if DEBUGIT_NEWFIELD logfile << "Field::newfield " << color << std::endl;
 			curblock->face = color;
 			curblock->state = BLOCKSTATE_STILL;
 			curblock->ischain = 0;
@@ -1134,7 +1134,7 @@ void Field::newline() {
 		int count = colors;
 		if (lastface > -1) count--;
 		if (watchout[i] > -1) count--;
-		int newface = Root::rnd(1, count);
+		int newface = rnd(1, count);
 		if (lastface > -1 && watchout[i] > -1) {
 			if	  (newface >= lastface && newface >= watchout[i]) newface += 2;
 			else if (newface >= lastface) {
@@ -1149,7 +1149,7 @@ void Field::newline() {
 				(watchout[i] > -1 && (newface >= watchout[i]))) {
 			newface += 1;
 		}
-		if DEBUGIT_NEWLINE Root::logfile << "Field::newline  Face " << i << ": " << newface << std::endl;
+		if DEBUGIT_NEWLINE logfile << "Field::newline  Face " << i << ": " << newface << std::endl;
 		nextrow[i]->face = lastface = newface;
 	}
 	delete watchout;
@@ -1166,14 +1166,14 @@ GLfloat Field::calcpos(byte dimension, int blocks, int cellnum, int cells) {
 	return ((GLfloat) ((space * cellnum) + (sidelen * (cellnum-1))) / (GLfloat) screenlen)*2-1;
 }
 
-void Root::init() {
-	Root::logfile.open("log");
-	Root::logfile << WINNAME << " " << VERSION << " log" << std::endl << "Rand_max: " << RAND_MAX << std::endl;
-	Root::state = STATE_TITLE;
-	Root::CLOCKS_PER_FRAME = (CLOCKS_PER_SEC / 80);
+void init() {
+	logfile.open("log");
+	logfile << WINNAME << " " << VERSION << " log" << std::endl << "Rand_max: " << RAND_MAX << std::endl;
+	state = STATE_TITLE;
+	CLOCKS_PER_FRAME = (CLOCKS_PER_SEC / 80);
 }
 
-void Root::loadtexs() {
+void loadtexs() {
 	                 //012345678901234
 	char filename[] = "block - -  .raw";
 	for (int i = 1; i <= 9; ++i) {
@@ -1194,14 +1194,14 @@ void Root::loadtexs() {
 					filename[7] = 'b';
 				break;
 				default:
-					Root::logfile << __LINE__ << " fffffff";
+					logfile << __LINE__ << " fffffff";
 				break;
 			}
 			for (int frameid = 0; frameid < BLOCK_MAXFRAMES; ++frameid) {
 				filename[9] = '0' + frameid / 10;
 				filename[10] = '0' + frameid % 10;
 				int imgidx = (j == 1 ? IMGMEM_OFFSET0 : (j == 2 ? IMGMEM_OFFSETA : IMGMEM_OFFSETB)) + IMGMEM__FRAMES * i + frameid;
-				Root::logfile << filename << "->" << imgidx << std::endl;
+				logfile << filename << "->" << imgidx << std::endl;
 				std::fstream fin;
 				fin.open(filename, std::ios::in | std::ios::binary);
 				if (!fin.is_open()) break;

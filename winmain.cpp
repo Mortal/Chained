@@ -23,7 +23,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
 					LPSTR lpCmdLine,
 					int iCmdShow)
 {
-	Root::init();
+	init();
 	
 	WNDCLASS wc;
 	MSG msg;
@@ -57,10 +57,10 @@ int WINAPI WinMain (HINSTANCE hInstance,
 	width = 2*SCREEN_WIDTH-width;
 	height = 2*SCREEN_HEIGHT-height;
 	MoveWindow(hWnd,0,0,width,height,true);
-	Root::logfile << width << " " << height << std::endl;
+	logfile << width << " " << height << std::endl;
 
 	/* enable OpenGL for the window */
-	Root::EnableOpenGL();
+	EnableOpenGL();
 	
 	/*ilInit();
 	iluInit();
@@ -70,7 +70,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);
 
-	Root::loadtexs();
+	loadtexs();
 
 	/* program main loop */
 	while (!bQuit)
@@ -93,14 +93,14 @@ int WINAPI WinMain (HINSTANCE hInstance,
 		{
 			/* OpenGL animation code goes here */
 			
-			clock_t endframe = clock() + Root::CLOCKS_PER_FRAME;
+			clock_t endframe = clock() + CLOCKS_PER_FRAME;
 
 			glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 			glClear (GL_COLOR_BUFFER_BIT);
 
 			glPushMatrix ();
 			glMatrixMode(GL_PROJECTION);
-			int swap = Root::tick() ? 0 : 1;
+			int swap = tick() ? 0 : 1;
 			glPopMatrix ();
 
 			if (swap) SwapBuffers (hDC);
@@ -109,7 +109,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
 	}
 
 	/* shutdown OpenGL */
-	Root::DisableOpenGL();
+	DisableOpenGL();
 
 	/* destroy the window explicitly */
 	DestroyWindow (hWnd);
@@ -139,12 +139,12 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message,
 		return 0;
 
 	case WM_KEYUP:
-		Root::KeyUp(wParam);
+		KeyUp(wParam);
 		return 0;
 
 	case WM_KEYDOWN:
 		if (lParam & 0x40000000) return 0;
-		Root::KeyDown(wParam);
+		KeyDown(wParam);
 		/*switch (wParam)
 		{
 		case VK_ESCAPE:
@@ -158,7 +158,7 @@ LRESULT CALLBACK WndProc (HWND hWnd, UINT message,
 	}
 }
 
-void Root::EnableOpenGL()
+void EnableOpenGL()
 {
 	PIXELFORMATDESCRIPTOR pfd;
 	int iFormat;
@@ -185,7 +185,7 @@ void Root::EnableOpenGL()
 
 }
 
-void Root::DisableOpenGL ()
+void DisableOpenGL ()
 {
 	wglMakeCurrent (NULL, NULL);
 	wglDeleteContext (hRC);

@@ -24,9 +24,9 @@ XWindowAttributes       gwa;
 XEvent                  xev;
 
 int main(int argc, char *argv[]) {
-	Root::init();
-	Root::EnableOpenGL();
-	Root::loadtexs();
+	init();
+	EnableOpenGL();
+	loadtexs();
 	XSelectInput(dpy, win, KeyPressMask | KeyReleaseMask);
 	/* program main loop */
 	while(1) {
@@ -43,10 +43,10 @@ int main(int argc, char *argv[]) {
 			else vk = sym;
 			if (key->type == KeyPress) {
 				printf("Key down: %d -> %d -> %d\n", key->keycode, sym, vk);
-				Root::KeyDown(vk);
+				KeyDown(vk);
 			} else {
 				printf("Key up: %d -> %d -> %d\n", key->keycode, sym, vk);
-				Root::KeyUp(vk);
+				KeyUp(vk);
 			}
 		} else if (XCheckTypedEvent(dpy, ClientMessage, &xev)) {
 			break;
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
 
 			glPushMatrix ();
 			glMatrixMode(GL_PROJECTION);
-			int swap = Root::tick() ? 0 : 1;
+			int swap = tick() ? 0 : 1;
 			glPopMatrix ();
 
 			if (swap) glXSwapBuffers(dpy, win);
@@ -77,10 +77,10 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	printf("Bye bye\n");
-	Root::DisableOpenGL();
+	DisableOpenGL();
 }
 
-void Root::EnableOpenGL() {
+void EnableOpenGL() {
 
 	dpy = XOpenDisplay(NULL);
 
@@ -121,7 +121,7 @@ void Root::EnableOpenGL() {
 	//glBlendFunc(GL_SRC_ALPHA,GL_ONE);
 }
 
-void Root::DisableOpenGL() {
+void DisableOpenGL() {
 	glXMakeCurrent(dpy, None, NULL);
 	glXDestroyContext(dpy, glc);
 	XDestroyWindow(dpy, win);
