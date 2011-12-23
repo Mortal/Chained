@@ -22,7 +22,15 @@ class Field {
 		void newfield(int width, int height, int colors, int hasvs);
 		void newline();
 		class Game *parentgame;
-		void clearmatchframes();
+		void clearmatchframes() {
+			int w = this->getwidth();
+			int h = this->getheight(); 
+			for (int y = h; y--;) {
+				for (int x = 0; x < w; x++) {
+					if (this->blocks[y*w+x]) this->blocks[y*w+x]->matchframe = 0;
+				}
+			}   
+		}
 		void checkblocks();
 		void fallblocks();
 		Field();

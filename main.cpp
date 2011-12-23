@@ -304,16 +304,6 @@ void Field::raisestack() {
 	}
 }
 
-void Field::clearmatchframes() {
-	int w = this->getwidth();
-	int h = this->getheight(); 
-	for (int y = h; y--;) {
-		for (int x = 0; x < w; x++) {
-			if (this->blocks[y*w+x]) this->blocks[y*w+x]->matchframe = 0;
-		}
-	}   
-}
-
 void Field::checkblocks() {
 	int w = this->getwidth();
 	int h = this->getheight();
