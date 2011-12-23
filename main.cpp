@@ -304,64 +304,6 @@ void Field::raisestack() {
 	}
 }
 
-void Field::fallblocks() {
-	int w = this->getwidth();
-	int h = this->getheight();
-	int firstrow = 1;
-	int fallen = 0; // How many blocks have fallen this frame.
-	for (int y = h; y--;) {
-		for (int x = 0; x < w; x++) {
-			Block *cur = this->blocks[y*w+x];
-			Block *beneath = 0x0;
-			if (!firstrow) beneath = this->blocks[(y+1)*w+x];
-			if (this->blockface(x,y) != BLOCKFACE_NOWT) {
-				switch (this->blockstate(x,y)) {
-					case BLOCKSTATE_STILL:
-						if (!firstrow) {
-							if (!beneath) {
-								if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " We're gonna fall!" << std::endl;
-								cur->state = BLOCKSTATE_WILLFALL;
-								cur->substate = 0;
-							} else if (beneath->state == BLOCKSTATE_WILLFALL || beneath->state == BLOCKSTATE_FALLING) {
-								if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " We're gonna fall along with the block beneath us." << std::endl;
-								cur->state = BLOCKSTATE_WILLFALL;
-								cur->substate = ((beneath->state == BLOCKSTATE_WILLFALL) ? beneath->substate : 0);
-							}
-						}
-					break;
-					case BLOCKSTATE_WILLFALL:
-						if (!firstrow) {
-							if (beneath && beneath->state != BLOCKSTATE_FALLING && beneath->state != BLOCKSTATE_WILLFALL) {
-								if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " Apparently, we can't fall anyway, something's beneath us." << std::endl;
-								cur->state = BLOCKSTATE_STILL;
-								cur->substate = 0;
-							} else if (++cur->substate >= TIME_FALL_BEFORE) {
-								if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " We're falling!" << std::endl;
-								cur->state = BLOCKSTATE_FALLING;
-								cur = 0;
-							}
-						}
-					break;
-					case BLOCKSTATE_FALLING:
-						if (beneath || firstrow) {
-							if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " Plonk. Stopped falling." << std::endl;
-							cur->state = BLOCKSTATE_STILL;
-							cur->substate = 0;
-						} else {
-							if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " Falling a step." << std::endl;
-							this->rawswap(x,y,x,y+1);
-							fallen++;
-							cur = 0;
-						}
-					break;
-				}
-			}
-		}
-		firstrow = 0;
-	}
-	if (fallen && DEBUGIT_FIELDFALLBLOCKS) logfile << "Field::fallblo. Blocks fallen: " << fallen << std::endl;
-}
-
 byte Field::blockfallchain(int x, int y) {
 	if (!blockis(x,y)) return 0;
 	switch (blockstate(x,y)) {
