@@ -293,24 +293,6 @@ void draw() {
 	}
 }
 
-void Field::rawswap(int x1, int y1, int x2, int y2) {
-	int i = 0;
-	if (y2 != y1) {
-		i++; // BREAK
-	}
-	if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  " << x1 << " " << y1 << " " << x2 << " " << y2 << std::endl;
-	int w = this->getwidth();
-	int idx1 = y1*w+x1;
-	int idx2 = y2*w+x2;
-	Block *tempblock;
-	if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  -- " << idx1 << " " << this->blocks[idx1] << " <-> " << idx2 << " " << this->blocks[idx2] << std::endl;
-	tempblock = this->blocks[idx1];
-	this->blocks[idx1] = this->blocks[idx2];
-	this->blocks[idx2] = tempblock;
-	if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  ++ " << idx1 << " " << this->blocks[idx1] << " <-> " << idx2 << " " << this->blocks[idx2] << std::endl;
-	//if DEBUGIT_FIELDRAWSWAP logfile << "Field::rawswap  No crash!" << std::endl;
-}
-
 void SwapStack::swap(Block *block, int fromx, int fromy, int tox, int toy, byte switchblock, Field *parent) {
 	if (!block) {
 		if DEBUGIT_SWAPSTACKSWAP logfile << "SwapStack::swap Oh my, nullpointered block." << std::endl;
