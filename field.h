@@ -50,5 +50,16 @@ class Field {
 		class SwapStack *swapStack;
 		class Popper *poppers[MAXPOPPERS];
 		int usedpoppers;
-		int notStillCount();
+		inline int notStillCount() {
+			int count = 0;
+			int n = getwidth();
+			n *= getheight();
+			for (int i = 0; i < n; i++) {
+				if (blocks[i] && blocks[i]->state != BLOCKSTATE_STILL) {
+					if DEBUGIT_FIELDPOPPERCOUNT logfile << "Field::fallC.   poppers[" << i << "] is in use and not still: " << poppers[i] << std::endl;
+					count++;
+				}
+			}
+			return count;
+		}
 };

@@ -251,19 +251,6 @@ int tick() {
 	return 0;
 }
 
-int Field::notStillCount() {
-	int count = 0;
-	int n = getwidth();
-	n *= getheight();
-	for (int i = 0; i < n; i++) {
-		if (blocks[i] && blocks[i]->state != BLOCKSTATE_STILL) {
-			if DEBUGIT_FIELDPOPPERCOUNT logfile << "Field::fallC.   poppers[" << i << "] is in use and not still: " << poppers[i] << std::endl;
-			count++;
-		}
-	}
-	return count;
-}
-
 void Field::raisestack() {
 	byte raisenow = 0;
 	// whether we may raise the stack
