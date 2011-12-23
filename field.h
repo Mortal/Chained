@@ -12,14 +12,30 @@ class Field {
 		void move(int x1, int y1, int x2, int y2);
 		static GLfloat calcpos(byte dimension, int blocks, int cellnum, int cells);
 		void draw(GLfloat offx, GLfloat offy, GLfloat extray_draw, GLfloat extray_tex);
-		int getwidth();
-		int getheight();
-		short getcolors();
-		byte gethasvs();
-		bool blockis(int x, int y);
-		int blockface(int x, int y);
-		int blockstate(int x, int y);
-		byte blockischain(int x, int y);
+		int getwidth() { return this->width; }
+		int getheight() { return this->height; }
+		short getcolors() { return this->colors; }
+		byte gethasvs() { return this->hasvs; }
+		bool blockis(int x, int y) {
+			int idx = y*getwidth()+x;
+			if (this->blocks[idx]) return true;
+			return false;
+		}
+		int blockface(int x, int y) {
+			int idx = y*getwidth()+x;
+			if (this->blocks[idx]) return this->blocks[y*getwidth()+x]->face;
+			return BLOCKFACE_NOWT;
+		}
+		int blockstate(int x, int y) {
+			int idx = y*getwidth()+x;
+			if (this->blocks[idx]) return this->blocks[y*getwidth()+x]->state;
+			return BLOCKSTATE_SHH;
+		}
+		byte blockischain(int x, int y) {
+			int idx = y*getwidth()+x;
+			if (this->blocks[idx]) return this->blocks[y*getwidth()+x]->ischain ? 1 : 0;
+			return 0;
+		}
 		byte blockfallchain(int x, int y) {
 			if (!blockis(x,y)) return 0;
 			switch (blockstate(x,y)) {

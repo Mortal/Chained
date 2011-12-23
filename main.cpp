@@ -293,46 +293,6 @@ void draw() {
 	}
 }
 
-int Field::getwidth() {
-	return this->width;
-}
-
-int Field::getheight() {
-	return this->height;
-}
-
-short Field::getcolors() {
-	return this->colors;
-}
-
-byte Field::gethasvs() {
-	return this->hasvs;
-}
-
-bool Field::blockis(int x, int y) {
-	int idx = y*getwidth()+x;
-	if (this->blocks[idx]) return true;
-	return false;
-}
-
-int Field::blockface(int x, int y) {
-	int idx = y*getwidth()+x;
-	if (this->blocks[idx]) return this->blocks[y*getwidth()+x]->face;
-	return BLOCKFACE_NOWT;
-}
-
-int Field::blockstate(int x, int y) {
-	int idx = y*getwidth()+x;
-	if (this->blocks[idx]) return this->blocks[y*getwidth()+x]->state;
-	return BLOCKSTATE_SHH;
-}
-
-byte Field::blockischain(int x, int y) {
-	int idx = y*getwidth()+x;
-	if (this->blocks[idx]) return this->blocks[y*getwidth()+x]->ischain ? 1 : 0;
-	return 0;
-}
-
 void Field::newfield(int width, int height, int colors, int hasvs) {
 	this->width = width;
 	this->height = height;
