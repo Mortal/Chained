@@ -9,7 +9,20 @@ class Game {
 		int cursorx; int cursory;
 		int points;
 		class ScoringSystem ss;
-		void draw();
+		void draw() {
+			GLfloat offx = this->field.posx;
+			GLfloat offy = this->field.posy;
+
+			this->drawbackground(offx, offy);
+
+			GLfloat extray_tex = (float) this->field.stackoffset/(float) STACKOFFSET_MAX;
+			GLfloat extray_draw = (extray_tex*BLOCK_HEIGHT/(float) SCREEN_HEIGHT*2);
+			offy += extray_draw;
+
+			this->field.draw(offx, offy, extray_draw, extray_tex);
+
+			this->drawcursors(offx, offy);
+		}
 		inline void key(int which, byte dir) {
 			if DEBUGIT_KEYS logfile << "Game::key	  Game " << which << " direction " << (int) dir << std::endl;
 			switch (which) {
