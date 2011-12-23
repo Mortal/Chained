@@ -105,7 +105,7 @@ class Field {
 					 (watchout[i] > -1 && (newface >= watchout[i]))) {
 						newface += 1;
 					}
-				if DEBUGIT_NEWLINE logfile << "Field::newline  Face " << i << ": " << newface << std::endl;
+				if (DEBUGIT_NEWLINE) logfile << "Field::newline  Face " << i << ": " << newface << std::endl;
 				nextrow[i]->face = lastface = newface;
 			}
 			delete watchout;
@@ -157,7 +157,7 @@ class Field {
 								matches++;\
 							}\
 							if (matches > 1) {\
-								if DEBUGIT_FIELDCHECKBLOCKS logfile << "Field::chkblo.  " << x << "," << y << " Matching " << DEBUGMSG << "!" << std::endl;\
+								if (DEBUGIT_FIELDCHECKBLOCKS) logfile << "Field::chkblo.  " << x << "," << y << " Matching " << DEBUGMSG << "!" << std::endl;\
 								for (int i = COORD; i >= COORD + ((DIR) * matches); i += (DIR)) {\
 									if (!this->blocks[IDX]->matchframe) {\
 										this->blocks[IDX]->matchframe = 1;\
@@ -175,7 +175,7 @@ class Field {
 				firstrow = 0;
 			}
 			if (totalmatches) {
-				if DEBUGIT_FIELDCHECKBLOCKS logfile << "Field::chkblo.  Alright, we have " << totalmatches << " matches." << std::endl;
+				if (DEBUGIT_FIELDCHECKBLOCKS) logfile << "Field::chkblo.  Alright, we have " << totalmatches << " matches." << std::endl;
 				int popperid = -1;
 				for (int i = 0; i < this->usedpoppers; i++) {
 					if (!this->poppers[i]) {popperid = i; break;}
@@ -184,13 +184,13 @@ class Field {
 					popperid = this->usedpoppers++;
 				}
 				if (popperid < MAXPOPPERS) {
-					if DEBUGIT_FIELDCHECKBLOCKS logfile << "Field::chkblo.  popperid = " << popperid << std::endl;
+					if (DEBUGIT_FIELDCHECKBLOCKS) logfile << "Field::chkblo.  popperid = " << popperid << std::endl;
 					Popper *popper;
 					popper = new Popper(totalmatches, this);
 					for (int y = 0; y < h; y++) {
 						for (int x = 0; x < w; x++) {
 							if (this->blocks[y*w+x] && this->blocks[y*w+x]->matchframe) {
-								if DEBUGIT_FIELDCHECKBLOCKS logfile << "Field::chkblo.  Adding " << x << "," << y << std::endl;
+								if (DEBUGIT_FIELDCHECKBLOCKS) logfile << "Field::chkblo.  Adding " << x << "," << y << std::endl;
 								popper->addblock(this->blocks[y*w+x], x, y);
 							}
 						}
@@ -214,11 +214,11 @@ class Field {
 							case BLOCKSTATE_STILL:
 								if (!firstrow) {
 									if (!beneath) {
-										if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " We're gonna fall!" << std::endl;
+										if (DEBUGIT_FIELDFALLBLOCKS) logfile << "Field::fallblo. " << x << "," << y << " We're gonna fall!" << std::endl;
 										cur->state = BLOCKSTATE_WILLFALL;
 										cur->substate = 0;
 									} else if (beneath->state == BLOCKSTATE_WILLFALL || beneath->state == BLOCKSTATE_FALLING) {
-										if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " We're gonna fall along with the block beneath us." << std::endl;
+										if (DEBUGIT_FIELDFALLBLOCKS) logfile << "Field::fallblo. " << x << "," << y << " We're gonna fall along with the block beneath us." << std::endl;
 										cur->state = BLOCKSTATE_WILLFALL;
 										cur->substate = ((beneath->state == BLOCKSTATE_WILLFALL) ? beneath->substate : 0);
 									}
@@ -227,11 +227,11 @@ class Field {
 							case BLOCKSTATE_WILLFALL:
 								if (!firstrow) {
 									if (beneath && beneath->state != BLOCKSTATE_FALLING && beneath->state != BLOCKSTATE_WILLFALL) {
-										if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " Apparently, we can't fall anyway, something's beneath us." << std::endl;
+										if (DEBUGIT_FIELDFALLBLOCKS) logfile << "Field::fallblo. " << x << "," << y << " Apparently, we can't fall anyway, something's beneath us." << std::endl;
 										cur->state = BLOCKSTATE_STILL;
 										cur->substate = 0;
 									} else if (++cur->substate >= TIME_FALL_BEFORE) {
-										if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " We're falling!" << std::endl;
+										if (DEBUGIT_FIELDFALLBLOCKS) logfile << "Field::fallblo. " << x << "," << y << " We're falling!" << std::endl;
 										cur->state = BLOCKSTATE_FALLING;
 										cur = 0;
 									}
@@ -239,11 +239,11 @@ class Field {
 								break;
 							case BLOCKSTATE_FALLING:
 								if (beneath || firstrow) {
-									if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " Plonk. Stopped falling." << std::endl;
+									if (DEBUGIT_FIELDFALLBLOCKS) logfile << "Field::fallblo. " << x << "," << y << " Plonk. Stopped falling." << std::endl;
 									cur->state = BLOCKSTATE_STILL;
 									cur->substate = 0;
 								} else {
-									if DEBUGIT_FIELDFALLBLOCKS logfile << "Field::fallblo. " << x << "," << y << " Falling a step." << std::endl;
+									if (DEBUGIT_FIELDFALLBLOCKS) logfile << "Field::fallblo. " << x << "," << y << " Falling a step." << std::endl;
 									this->rawswap(x,y,x,y+1);
 									fallen++;
 									cur = 0;
@@ -270,25 +270,25 @@ class Field {
 			int h = getheight();
 			int idx = y * w + x;
 			if (!blocks[idx]) {
-				if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " doesn't exist!" << std::endl;
+				if (DEBUGIT_FIELDSWAPABLE) logfile << "Field::swapable " << x << "," << y << " doesn't exist!" << std::endl;
 				if (y > 0) {
 					int above = idx-w;
 					if (blocks[above] && blocks[above]->state != BLOCKSTATE_FALLING) {
-						if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " The block above us exists, so we can't be switched!" << std::endl;
+						if (DEBUGIT_FIELDSWAPABLE) logfile << "Field::swapable " << x << "," << y << " The block above us exists, so we can't be switched!" << std::endl;
 						return 0;
 					}
 				}
-				if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " ...but the aboves are clear so that doesn't matter!" << std::endl;
+				if (DEBUGIT_FIELDSWAPABLE) logfile << "Field::swapable " << x << "," << y << " ...but the aboves are clear so that doesn't matter!" << std::endl;
 				return 1;
 			} else {
 				if (y+1 < h) {
 					int below = idx+w;
 					if (!blocks[below] || blocks[below]->state == BLOCKSTATE_SHH || blocks[below]->face == BLOCKFACE_NOWT) {
-						if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " The block under us doesn't exist, so we can't be switched!" << std::endl;
+						if (DEBUGIT_FIELDSWAPABLE) logfile << "Field::swapable " << x << "," << y << " The block under us doesn't exist, so we can't be switched!" << std::endl;
 						return 0;
 					}
 				}
-				if DEBUGIT_FIELDSWAPABLE logfile << "Field::swapable " << x << "," << y << " We'll let the local block decide." << std::endl;
+				if (DEBUGIT_FIELDSWAPABLE) logfile << "Field::swapable " << x << "," << y << " We'll let the local block decide." << std::endl;
 				return blocks[idx]->swapable();
 			}
 		}
@@ -326,7 +326,7 @@ class Field {
 			n *= getheight();
 			for (int i = 0; i < n; i++) {
 				if (blocks[i] && blocks[i]->state != BLOCKSTATE_STILL) {
-					if DEBUGIT_FIELDPOPPERCOUNT logfile << "Field::fallC.   poppers[" << i << "] is in use and not still: " << poppers[i] << std::endl;
+					if (DEBUGIT_FIELDPOPPERCOUNT) logfile << "Field::fallC.   poppers[" << i << "] is in use and not still: " << poppers[i] << std::endl;
 					count++;
 				}
 			}

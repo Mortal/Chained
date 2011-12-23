@@ -19,10 +19,10 @@ class Swap {
 			this->parentfield = parentfield;
 			this->frame = 0;
 			if (this->switchblock) {
-				if DEBUGIT_SWAPCONSTRUCT logfile << "Swap::Swap	  Rawswapping (" << (int) this->switchblock << ") " << fromx << "," << fromy << " " << tox << "," << toy << std::endl;
+				if (DEBUGIT_SWAPCONSTRUCT) logfile << "Swap::Swap	  Rawswapping (" << (int) this->switchblock << ") " << fromx << "," << fromy << " " << tox << "," << toy << std::endl;
 				this->parentfield->rawswap(fromx,fromy,tox,toy);
 			} else {
-				if DEBUGIT_SWAPCONSTRUCT logfile << "Swap::Swap	  Not rawswapping (" << (int) this->switchblock << ") " << fromx << "," << fromy << " " << tox << "," << toy << std::endl;
+				if (DEBUGIT_SWAPCONSTRUCT) logfile << "Swap::Swap	  Not rawswapping (" << (int) this->switchblock << ") " << fromx << "," << fromy << " " << tox << "," << toy << std::endl;
 			}
 		}
 		int draw(float offx, float offy) {

@@ -29,14 +29,14 @@ class Block {
 		}
 		inline void draw(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLfloat extray_draw, GLfloat extray_tex) {
 			if (this->face == BLOCKFACE_NOWT || this->face == BLOCKFACE_GARBAGE) return;
-			if DEBUGIT_BLOCKDRAW logfile << "Block::draw	 ---- " << x << " " << y << " " << w << " " << h << std::endl;
+			if (DEBUGIT_BLOCKDRAW) logfile << "Block::draw	 ---- " << x << " " << y << " " << w << " " << h << std::endl;
 			int face = 0;
 			if (this->facestate == FACESTATE_NORMAL) face += IMGMEM_OFFSET0;
 			else if (this->facestate == FACESTATE_BLINK) face += IMGMEM_OFFSETA;
 			else if (this->facestate == FACESTATE_CLEAR) face += IMGMEM_OFFSETB;
 			else face = 0;
 			face += IMGMEM__FRAMES * this->face;
-			if DEBUGIT_BLOCKDRAW logfile << "Block::draw	 Face = " << face << std::endl;
+			if (DEBUGIT_BLOCKDRAW) logfile << "Block::draw	 Face = " << face << std::endl;
 			glBindTexture (GL_TEXTURE_2D, face);
 			y += h; x += w;
 			glBegin (GL_QUADS);

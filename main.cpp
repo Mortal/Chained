@@ -86,7 +86,7 @@ void Key(int key, byte dir) {
 			
 		break;
 		case STATE_GAME:
-			if DEBUGIT_KEYS logfile << "key	  " << ((char) (key & 0xFF)) << " direction " << ((int) (dir)) << std::endl;
+			if (DEBUGIT_KEYS) logfile << "key	  " << ((char) (key & 0xFF)) << " direction " << ((int) (dir)) << std::endl;
 			if (dir == KEYTYPE_DOWN) {
 				switch (key) {
 					case VK_F1:
@@ -271,20 +271,20 @@ void draw() {
 				glBegin (GL_QUADS);
 				float x = 2*(-0.5f + ((1.0f+(2.0f*(j-(float) 1)))*(float) BLOCK_WIDTH)/(float) SCREEN_WIDTH);
 				float y = 2*(0.5f - (float) BLOCK_HEIGHT/(float) SCREEN_HEIGHT);
-				if DEBUGIT_ROOTDRAW logfile << "draw	  " << x << "," << y << " ";
+				if (DEBUGIT_ROOTDRAW) logfile << "draw	  " << x << "," << y << " ";
 				glTexCoord2f (0.0f, 0.0f);
 				glVertex2f (x, y); // NW
 				float oldy = y;
 				y = 2*(0.5f - (float) 2*(float) BLOCK_HEIGHT/(float) SCREEN_HEIGHT);
-				if DEBUGIT_ROOTDRAW logfile << "draw	  " << x << "," << y << " ";
+				if (DEBUGIT_ROOTDRAW) logfile << "draw	  " << x << "," << y << " ";
 				glTexCoord2f (0.0f, 1.0f);
 				glVertex2f (x, y); // NE
 				x = 2*(-0.5f + ((2.0f+(2.0f*(j-1.0f)))*(float) BLOCK_WIDTH)/(float) SCREEN_WIDTH);
-				if DEBUGIT_ROOTDRAW logfile << "draw	  " << x << "," << y << " ";
+				if (DEBUGIT_ROOTDRAW) logfile << "draw	  " << x << "," << y << " ";
 				glTexCoord2f (1.0f, 1.0f);
 				glVertex2f (x, y); // SE
 				y = oldy;
-				if DEBUGIT_ROOTDRAW logfile << "draw	  " << x << "," << y << std::endl;
+				if (DEBUGIT_ROOTDRAW) logfile << "draw	  " << x << "," << y << std::endl;
 				glTexCoord2f (1.0f, 0.0f);
 				glVertex2f (x, y); // SW
 				glEnd ();

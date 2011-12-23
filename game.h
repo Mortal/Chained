@@ -25,7 +25,7 @@ class Game {
 			this->drawcursors(offx, offy);
 		}
 		inline void key(int which, byte dir) {
-			if DEBUGIT_KEYS logfile << "Game::key	  Game " << which << " direction " << (int) dir << std::endl;
+			if (DEBUGIT_KEYS) logfile << "Game::key	  Game " << which << " direction " << (int) dir << std::endl;
 			switch (which) {
 				case GAMEKEY_LEFT:
 					if (dir == KEYTYPE_UP) break;
@@ -75,9 +75,9 @@ class Game {
 			glVertex2f(w, s);
 			glEnd();
 
-			if DEBUGIT_DRAWBACKGROUND logfile << "Game::drawbg.   " << this->id << " " << n << " " << s << " " << w << " " << e << std::endl;
-			if DEBUGIT_DRAWBACKGROUND logfile << "Game::drawbg.   " << this->id << " " << n*SCREEN_HEIGHT << " " << s*SCREEN_HEIGHT << " " << w*SCREEN_WIDTH << " " << e*SCREEN_WIDTH << std::endl;
-			if DEBUGIT_DRAWBACKGROUND logfile << "Game::drawbg.   " << this->id << " " << (n-s)*SCREEN_HEIGHT << " " << (e-w)*SCREEN_WIDTH << std::endl;
+			if (DEBUGIT_DRAWBACKGROUND) logfile << "Game::drawbg.   " << this->id << " " << n << " " << s << " " << w << " " << e << std::endl;
+			if (DEBUGIT_DRAWBACKGROUND) logfile << "Game::drawbg.   " << this->id << " " << n*SCREEN_HEIGHT << " " << s*SCREEN_HEIGHT << " " << w*SCREEN_WIDTH << " " << e*SCREEN_WIDTH << std::endl;
+			if (DEBUGIT_DRAWBACKGROUND) logfile << "Game::drawbg.   " << this->id << " " << (n-s)*SCREEN_HEIGHT << " " << (e-w)*SCREEN_WIDTH << std::endl;
 		}
 		void drawcursors(GLfloat offx, GLfloat offy) {
 			offx += (GLfloat) 2 * (this->cursorx * BLOCK_WIDTH) / (GLfloat) SCREEN_WIDTH;
@@ -95,7 +95,7 @@ class Game {
 			offx += (GLfloat) 2 * (BLOCK_WIDTH) / (GLfloat) SCREEN_WIDTH;
 			GLfloat rightw = offx + 2 * (CURSOR_PADDING / (GLfloat) SCREEN_WIDTH);
 			GLfloat righte = offx - 2 * ((CURSOR_MARGIN) / (GLfloat) SCREEN_WIDTH);
-			if DEBUGIT_GAMEDRAW logfile << "Game::drawcurs. " << offy << " " << topn << " " << tops << " " << bottomn <<
+			if (DEBUGIT_GAMEDRAW) logfile << "Game::drawcurs. " << offy << " " << topn << " " << tops << " " << bottomn <<
 				" " << bottoms << "  " << offx << " " << leftw << " " << lefte << " " << 
 					midw << " " << mide << " " << rightw << " " << righte << std::endl;
 
