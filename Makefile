@@ -1,4 +1,4 @@
-OBJS=main.o linuxmain.o field.o
+OBJS=main.o linuxmain.o field.o popper.o
 
 all: chained
 
