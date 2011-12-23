@@ -346,27 +346,6 @@ void draw() {
 	}
 }
 
-void Game::drawbackground(GLfloat offx, GLfloat offy) {
-	GLfloat w = offx;
-	GLfloat n = offy;
-	GLfloat e = w + (float) this->field.getwidth()*(float) BLOCK_WIDTH/(float) SCREEN_WIDTH*(float) 2;
-	GLfloat s = n + (float) this->field.getheight()*(float) BLOCK_HEIGHT/(float) SCREEN_HEIGHT*(float) 2;
-	
-	//if DEBUGIT_DRAWBACKGROUND 
-	
-	glBegin(GL_QUADS);
-		glColor4f(1.0f, ((this->id % 2) ? 1.0f : 0.0f), 0.0f, 1.0f);
-		glVertex2f(w, n);
-		glVertex2f(e, n);
-		glVertex2f(e, s);
-		glVertex2f(w, s);
-	glEnd();
-	
-	if DEBUGIT_DRAWBACKGROUND logfile << "Game::drawbg.   " << this->id << " " << n << " " << s << " " << w << " " << e << std::endl;
-	if DEBUGIT_DRAWBACKGROUND logfile << "Game::drawbg.   " << this->id << " " << n*SCREEN_HEIGHT << " " << s*SCREEN_HEIGHT << " " << w*SCREEN_WIDTH << " " << e*SCREEN_WIDTH << std::endl;
-	if DEBUGIT_DRAWBACKGROUND logfile << "Game::drawbg.   " << this->id << " " << (n-s)*SCREEN_HEIGHT << " " << (e-w)*SCREEN_WIDTH << std::endl;
-}
-
 void Game::drawcursors(GLfloat offx, GLfloat offy) {
 	offx += (GLfloat) 2 * (this->cursorx * BLOCK_WIDTH) / (GLfloat) SCREEN_WIDTH;
 	offy += (GLfloat) 2 * ((this->field.getheight()-this->cursory-1) * BLOCK_HEIGHT) / (GLfloat) SCREEN_HEIGHT;
