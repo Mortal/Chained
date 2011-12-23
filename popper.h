@@ -2,6 +2,7 @@
 #ifndef CHAINED_POPPER
 #define CHAINED_POPPER
 #include "constants.h"
+#include "block.h"
 
 class Popper {
 	public:

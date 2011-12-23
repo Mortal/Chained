@@ -293,18 +293,6 @@ void draw() {
 	}
 }
 
-void Popper::clean() {
-	for (int i = 0; i < stacklen; i++) {
-		if (this->stack[i]) {
-			int x = this->stackx[i];
-			int y = this->stacky[i];
-			this->parentfield->deleteblock(x, y);
-			this->stack[i] = 0;
-			while (y-- && this->parentfield->blockfallchain(x,y)) {}
-		}
-	}
-}
-
 int Field::getwidth() {
 	return this->width;
 }
