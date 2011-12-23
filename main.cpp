@@ -20,6 +20,7 @@
 #include "garbage.h"
 #include "popper.h"
 #include "swap.h"
+#include "swapstack.h"
 #include "root.h"
 
 int state = STATE_TITLE;
