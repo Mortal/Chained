@@ -18,7 +18,19 @@ class Popper {
 				if (DEBUGIT_POPPERADD && ischain) logfile << "Swap::addblock  Oh my, added a chain block." << std::endl;
 			}
 		}
-		Popper(int count, class Field *parentfield_);
+		Popper(int count, class Field *parentfield_) {
+			stacklen = count;
+			for (int i = 0; i < count; i++) {
+				stack[i] = 0;
+				stackx[i] = 0;
+				stacky[i] = 0;
+			}
+			used = 0;
+			framecount = 0;
+			nowpopping = -2;
+			parentfield = parentfield_;
+			ischain = 0;
+		}
 		void clean();
 		
 	private:

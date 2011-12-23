@@ -293,20 +293,6 @@ void draw() {
 	}
 }
 
-Popper::Popper(int count, class Field *parentfield_) {
-	stacklen = count;
-	for (int i = 0; i < count; i++) {
-		stack[i] = 0;
-		stackx[i] = 0;
-		stacky[i] = 0;
-	}
-	used = 0;
-	framecount = 0;
-	nowpopping = -2;
-	parentfield = parentfield_;
-	ischain = 0;
-}
-
 void Popper::clean() {
 	for (int i = 0; i < stacklen; i++) {
 		if (this->stack[i]) {
