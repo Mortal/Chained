@@ -16,7 +16,7 @@ void KeyUp(int key);
 int tick();
 void draw();
 int rnd(int min, int max);
-extern byte paused;
+extern bool paused;
 extern byte goframe;
 extern unsigned int keysheld[256];
 extern int **imgframes;

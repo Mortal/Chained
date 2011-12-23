@@ -26,7 +26,7 @@
 
 int state = STATE_TITLE;
 int substate = 0;
-byte paused = 0;
+bool paused = false;
 byte goframe = 1;
 int CLOCKS_PER_FRAME = 0;
 Game *game[8] = {0,0,0,0,0,0,0,0};
@@ -99,10 +99,10 @@ void Key(int key, byte dir) {
 						state = STATE_TITLE;
 					break;
 					case 'P':
-						if (paused) paused = 0;
+						if (paused) paused = false;
 						else {
 							goframe = 0;
-							paused = 1;
+							paused = true;
 						}
 					break;
 					case 'O':
