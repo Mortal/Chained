@@ -293,19 +293,6 @@ void draw() {
 	}
 }
 
-void Popper::addblock(Block *block, int x, int y) {
-	int idx = this->used++;
-	if (idx > this->stacklen) return;
-	this->stack[idx] = block;
-	this->stackx[idx] = x;
-	this->stacky[idx] = y;
-	block->state = BLOCKSTATE_POPPING;
-	if (!ischain) {
-		if (block->ischain) ischain = 1;
-		if (DEBUGIT_POPPERADD && ischain) logfile << "Swap::addblock  Oh my, added a chain block." << std::endl;
-	}
-}
-
 Popper::Popper(int count, class Field *parentfield_) {
 	stacklen = count;
 	for (int i = 0; i < count; i++) {
