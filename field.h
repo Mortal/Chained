@@ -1,4 +1,6 @@
 /* vim:set ts=4 sw=4 sts=4 noet: */
+#ifndef CHAINED_FIELD
+#define CHAINED_FIELD
 #include <GL/gl.h>
 #include "constants.h"
 #include "block.h"
@@ -336,3 +338,4 @@ class Field {
 			return count;
 		}
 };
+#endif

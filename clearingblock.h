@@ -1,4 +1,6 @@
 /* vim:set ts=4 sw=4 sts=4 noet: */
+#ifndef CHAINED_CLEARINGBLOCK
+#define CHAINED_CLEARINGBLOCK
 class ClearingBlock {
 	public:
 		int face;
@@ -12,3 +14,4 @@ class ClearingBlock {
 			this->frame = 0;
 		}
 };
+#endif

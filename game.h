@@ -1,4 +1,6 @@
 /* vim:set ts=4 sw=4 sts=4 noet: */
+#ifndef CHAINED_GAME
+#define CHAINED_GAME
 #include <GL/gl.h>
 #include "root.h"
 #include "scoringsystem.h"
@@ -144,3 +146,4 @@ class Game {
 		//class Root *parent; will always be static
 		int id;
 };
+#endif

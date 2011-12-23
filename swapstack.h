@@ -1,4 +1,6 @@
 /* vim:set ts=4 sw=4 sts=4 noet: */
+#ifndef CHAINED_SWAPSTACK
+#define CHAINED_SWAPSTACK
 #include "swap.h"
 
 class SwapStack {
@@ -62,3 +64,4 @@ class SwapStack {
 		class Swap *stack[MAXSWAPS];
 		int stacklen;
 };
+#endif
