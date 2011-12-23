@@ -293,17 +293,6 @@ void draw() {
 	}
 }
 
-void SwapStack::draw(float offx, float offy) {
-	for (int i = 0; i < this->stacklen; i++) {
-		if (stack[i]) {
-			if ((*stack[i]).draw(offx, offy)) { // If they returned 1, they're done for.
-				delete stack[i];
-				stack[i] = 0;
-			}
-		}
-	}
-}
-
 int Swap::draw(float offx, float offy) {
 	int h = this->parentfield->getheight();
 	float pos1x = 2*((GLfloat) (BLOCK_WIDTH * fromx) / (GLfloat) SCREEN_WIDTH);
