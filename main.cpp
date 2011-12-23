@@ -304,23 +304,6 @@ void Field::raisestack() {
 	}
 }
 
-byte Field::blockfallchain(int x, int y) {
-	if (!blockis(x,y)) return 0;
-	switch (blockstate(x,y)) {
-		case BLOCKSTATE_STILL:
-		case BLOCKSTATE_WILLFALL:
-		break;
-		default:
-		return 0;
-	}
-	int idx = y*getwidth()+x;
-	if (!blocks[idx]) logfile << "Field::bl.fl.ch " << __LINE__ << ": We're gonna crash." << std::endl;
-	blocks[idx]->state = BLOCKSTATE_WILLFALL;
-	blocks[idx]->substate = 0;
-	blocks[idx]->ischain = true;
-	return 1;
-}
-
 void Field::deleteblock(int x, int y) {
 	int w = this->getwidth();
 	int idx = y*w+x;

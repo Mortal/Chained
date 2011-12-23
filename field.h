@@ -20,7 +20,22 @@ class Field {
 		int blockface(int x, int y);
 		int blockstate(int x, int y);
 		byte blockischain(int x, int y);
-		byte blockfallchain(int x, int y);
+		byte blockfallchain(int x, int y) {
+			if (!blockis(x,y)) return 0;
+			switch (blockstate(x,y)) {
+				case BLOCKSTATE_STILL:
+				case BLOCKSTATE_WILLFALL:
+					break;
+				default:
+					return 0;
+			}
+			int idx = y*getwidth()+x;
+			if (!blocks[idx]) logfile << "Field::bl.fl.ch " << __LINE__ << ": We're gonna crash." << std::endl;
+			blocks[idx]->state = BLOCKSTATE_WILLFALL;
+			blocks[idx]->substate = 0;
+			blocks[idx]->ischain = true;
+			return 1;
+}
 		void newfield(int width, int height, int colors, int hasvs);
 		void newline();
 		class Game *parentgame;
