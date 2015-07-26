@@ -26,4 +26,5 @@ void EnableOpenGL();
 void DisableOpenGL();
 extern std::ofstream logfile;
 void loadtexs();
+
 #endif

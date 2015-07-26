@@ -95,10 +95,10 @@ static const int FACESTATE_CLEAR = (2);
 //#define IMGMEM_BLUEBLOCK (6)
 //#define IMGMEM_VSBLOCK (7)
 //#define IMGMEM_EXAMPLEBLOCK (9)
-static const int IMGMEM_OFFSET0 = (0);
-static const int IMGMEM_OFFSETA = (1500);
-static const int IMGMEM_OFFSETB = (3000);
-static const int IMGMEM__FRAMES = (100);
+// static const int IMGMEM_OFFSET0 = (0);
+// static const int IMGMEM_OFFSETA = (1500);
+// static const int IMGMEM_OFFSETB = (3000);
+// static const int IMGMEM__FRAMES = (100);
 
 static const int STATE_TITLE = (0);
 static const int STATE_MENU = (1);
